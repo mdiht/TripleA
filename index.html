@@ -1,827 +1,880 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triple A</title>
-    <style>
-        body {
-            background-color: #0b0b0b;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Triple A - Anime Streaming</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0b0b0b;
+      color: #ffffff;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
-        /* Header & Search Section */
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            margin-top: 20px;
-        }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      margin-top: 20px;
+    }
 
-        header h1 {
-            font-size: 36px;
-            color: #ff4757;
-            margin: 0 0 15px 0;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
-        }
+    header h1 {
+      font-size: 36px;
+      color: #ff4757;
+      margin: 0 0 15px 0;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+    }
 
-        .search-container {
-            max-width: 500px;
-            margin: 0 auto;
-            position: relative;
-        }
+    .search-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
 
-        .search-container input {
-            width: 100%;
-            padding: 14px 20px;
-            background-color: #1a1a1a;
-            border: 2px solid #2d2d2d;
-            border-radius: 30px;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-        }
+    #searchBar {
+      width: 100%;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      background-color: #1e1e1e;
+      color: white;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
 
-        .search-container input:focus {
-            border-color: #ff4757;
-            box-shadow: 0 0 15px rgba(255, 71, 87, 0.4);
-        }
+    /* Video Player Section */
+    .player-section {
+      max-width: 900px;
+      margin: 30px auto;
+      display: none;
+    }
 
-        /* Movie Box Grid Layout */
-        .landing-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      background-color: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-        .section-title {
-            font-size: 22px;
-            margin-bottom: 25px;
-            border-left: 4px solid #ff4757;
-            padding-left: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
 
-        .anime-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 25px;
-        }
+    .controls-container {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      background-color: #141414;
+      padding: 15px;
+      border-radius: 8px;
+      flex-wrap: wrap;
+    }
 
-        .anime-card {
-            background: #141414;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            border: 1px solid #222;
-            display: flex;
-            flex-direction: column;
-            aspect-ratio: 2/3;
-            position: relative;
-        }
+    select {
+      padding: 10px 15px;
+      background-color: #222;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 5px;
+      cursor: pointer;
+      flex: 1;
+      min-width: 150px;
+    }
 
-        .anime-card:hover {
-            transform: translateY(-8px);
-            border-color: #ff4757;
-            box-shadow: 0 12px 20px rgba(255, 71, 87, 0.25);
-        }
+    /* Anime Grid */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        /* Thumbnail Image Style */
-        .anime-card img {
-            width: 100%;
-            height: 80%;
-            object-fit: cover;
-            background-color: #222;
-        }
+    .anime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 30px;
+    }
 
-        .anime-info {
-            padding: 15px;
-            background-color: #141414;
-            text-align: center;
-            height: 20%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-        }
+    .anime-card {
+      background-color: #141414;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
 
-        .anime-info h3 {
-            margin: 0;
-            font-size: 16px;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
+    .anime-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(255, 71, 87, 0.2);
+    }
 
-        /* Video Player View */
-        .player-container-wrapper {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-        }
+    .anime-card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+    }
 
-        .back-btn {
-            background-color: #222;
-            color: #fff;
-            border: 1px solid #333;
-            padding: 10px 22px;
-            font-size: 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: 0.3s;
-            align-self: flex-start;
-            font-weight: bold;
-        }
+    .anime-info {
+      padding: 15px;
+    }
 
-        .back-btn:hover {
-            background-color: #ff4757;
-            border-color: #ff4757;
-            box-shadow: 0 0 10px rgba(255, 71, 87, 0.4);
-        }
+    .anime-info h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
 
-        .controls-container {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            width: 100%;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        select {
-            background-color: #1a1a1a;
-            color: #fff;
-            border: 2px solid #333;
-            padding: 12px 20px;
-            font-size: 15px;
-            border-radius: 8px;
-            outline: none;
-            cursor: pointer;
-            min-width: 180px;
-            transition: 0.3s;
-        }
-
-        select:focus {
-            border-color: #ff4757;
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            background-color: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0px 10px 30px rgba(0,0,0,0.7);
-            border: 1px solid #222;
-        }
-
-        #animeVideoFrame {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Bypass Layers & Popups */
-        .click-bypass-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 999;
-            cursor: pointer;
-            background: rgba(0,0,0,0.01);
-            display: none;
-        }
-
-        .ad-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(6px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .ad-box {
-            background: #1a1a1a;
-            padding: 35px;
-            border-radius: 15px;
-            border: 2px solid #ff4757;
-            max-width: 400px;
-            width: 90%;
-            box-sizing: border-box;
-            box-shadow: 0 0 25px rgba(255, 71, 87, 0.3);
-        }
-
-        .ad-box h2 {
-            margin-top: 0;
-            font-size: 22px;
-            color: #ff4757;
-        }
-
-        .ad-btn {
-            display: inline-block;
-            background-color: #ff4757;
-            color: white;
-            padding: 12px 28px;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 25px;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .ad-btn:hover {
-            background-color: #ff6b81;
-        }
-
-        .close-btn {
-            display: none;
-            background-color: #2ed573;
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            font-weight: bold;
-            font-size: 16px;
-            border-radius: 25px;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .close-btn:hover {
-            background-color: #26af5f;
-        }
-
-        @media (max-width: 768px) {
-            .anime-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 15px;
-            }
-            select {
-                width: 100%;
-            }
-        }
-    </style>
+    .anime-info p {
+      margin: 0;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
 
-<header id="mainHeader">
+  <header>
     <h1>Triple A</h1>
     <div class="search-container">
-        <input type="text" id="searchBar" placeholder="Search your favorite anime...">
+      <input type="text" id="searchBar" placeholder="Search your favorite anime...">
     </div>
-</header>
+  </header>
 
-<div class="landing-container" id="landingPage">
-    <div class="section-title">All Uploaded Anime</div>
-    <div class="anime-grid" id="animeGrid"></div>
-</div>
-
-<div class="player-container-wrapper" id="playerPage">
-    <button class="back-btn" onclick="backToHome()">⬅ Back to Home</button>
-    
+  <div class="player-section" id="playerSection">
+    <h2 id="playingTitle" style="color: #ff4757;">Now Playing</h2>
+    <div class="video-wrapper">
+      <video id="videoPlayer" controls preload="metadata"></video>
+    </div>
     <div class="controls-container">
-        <input type="hidden" id="animeSelect">
-      
-        <select id="seasonSelect">
-            <option value="">Select Season</option>
-        </select>
-
-        <select id="languageSelect" disabled>
-            <option value="">Select Language</option>
-        </select>
-
-        <select id="episodeSelect" disabled>
-            <option value="">Select Episode</option>
-        </select>
+      <select id="seasonSelect"><option>Select Season</option></select>
+      <select id="languageSelect"><option>Select Language</option></select>
+      <select id="episodeSelect"><option>Select Episode</option></select>
     </div>
+  </div>
 
-    <div class="video-container">
-        <div class="click-bypass-layer" id="bypassLayer"></div>
-        <iframe id="animeVideoFrame" src="" allowfullscreen></iframe>
+  <main class="main-container">
+    <div class="anime-grid" id="animeGrid"></div>
+  </main>
 
-        <div class="ad-overlay" id="adOverlay">
-            <div class="ad-box">
-                <h2>Stream Paused</h2>
-                <p>To continue watching this anime, please click the button below:</p>
-                <a href="https://omg10.com/4/11028861" target="_blank" class="ad-btn" id="adLink">To Continue Click Here</a>
-                <button class="close-btn" id="closeAdBtn">Continue Anime</button>
-            </div>
-        </div>
-    </div>
-</div>
+  <script>
+    // --- MULTIPLE ADSTERRA CONFIGURATION ---
+    const adsterraUrls = [
+      "https://www.effectivecpmnetwork.com/r3aadvq5n?key=4f49c5bb988eb130851d18b450f7c1b3",
+      "https://www.effectivecpmnetwork.com/d6n7xxmrx?key=7e8089f1a57bb1078c07b812ca5944ea",
+      "https://www.effectivecpmnetwork.com/d52cgmru?key=6459a4c497cc19f22400c0e8ba9a9bc5"
+    ]; 
+    
+    let currentAdIndex = 0;
+    let adTimer = null;
 
-<script>
-    // 🎯 DATABASE
     const animeData = {
-        "Death Note": {
-            "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnsx5G5rprTwWKmqLxJQEHZxwCoynDvMdGmg&s", 
-            "seasons": {
-                "Season 1": {
-                    "Original Audio": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-s-1-e-1-720-p/Death%20Note-S1E1-720P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-s-1-e-2-720-p/Death%20Note-S1E2-720P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E3-720P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E4-720P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E5-720P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E6-720P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E7-720P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E8-720P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E9-720P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-s-1-e-10-720-p/Death%20Note-S1E10-720P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-s-1-e-10-720-p/Death%20Note-S1E11-720P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-s-1-e-10-720-p/Death%20Note-S1E12-720P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E13-720P.mp4" },
-                        "Episode 14": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E14-720P.mp4" },
-                        "Episode 15": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E15-720P.mp4" },
-                        "Episode 16": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E16-720P.mp4" },
-                        "Episode 17": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E17-720P.mp4" },
-                        "Episode 18": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E18-720P.mp4" },
-                        "Episode 19": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E19-720P.mp4" },
-                        "Episode 20": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E20-720P.mp4" },
-                        "Episode 21": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E21-720P.mp4" },
-                        "Episode 22": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E22-720P.mp4" },
-                        "Episode 23": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E23-720P.mp4" },
-                        "Episode 24": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E24-720P.mp4" },
-                        "Episode 25": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E25-720P.mp4" },
-                        "Episode 26": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E26-720P.mp4" },
-                        "Episode 27": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E27-720P.mp4" },
-                        "Episode 28": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E28-720P.mp4" },
-                        "Episode 29": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E29-480P.mp4" },
-                        "Episode 30": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E30-480P.mp4" },
-                        "Episode 31": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E31-720P.mp4" },
-                        "Episode 32": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E32-480P.mp4" },
-                        "Episode 33": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E33-720P.mp4" },
-                        "Episode 34": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E34-720P.mp4" },
-                        "Episode 35": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E35-720P.mp4" }, 
-                        "Episode 36": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E36-720P.mp4" },
-                        "Episode 37": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E37-720P.mp4" }                 
-                    },
-                    "Hindi Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E2-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E3-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E4-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E5-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E6-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E7-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E8-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E9-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E10-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E11-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E12-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E13-480P.mp4" },
-                        "Episode 14": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E14-480P.mp4" },
-                        "Episode 15": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E15-480P.mp4" },
-                        "Episode 16": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E16-480P.mp4" },
-                        "Episode 17": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E17-480P.mp4" },
-                        "Episode 18": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E18-480P.mp4" },
-                        "Episode 19": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E19-480P.mp4" },
-                        "Episode 20": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E20-480P.mp4" },
-                        "Episode 21": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E21-480P.mp4" },
-                        "Episode 22": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E22-480P.mp4" },
-                        "Episode 23": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E23-480P.mp4" },
-                        "Episode 24": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E24-480P.mp4" },
-                        "Episode 25": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E25-480P.mp4" },
-                        "Episode 26": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E26-480P.mp4" },
-                        "Episode 27": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-28-480-p/Death%20Note%20%5BHindi%5D-S1E27-480P.mp4" },
-                        "Episode 28": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-28-480-p/Death%20Note%20%5BHindi%5D-S1E28-480P.mp4" },
-                        "Episode 29": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E29-480P.mp4" },
-                        "Episode 30": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E30-480P.mp4" },
-                        "Episode 31": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E31-480P.mp4" },
-                        "Episode 32": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E32-480P.mp4" },
-                        "Episode 33": { "720p": "link" },
-                        "Episode 34": { "720p": "link" },
-                        "Episode 35": { "720p": "link" },
-                        "Episode 36": { "720p": "link" },
-                        "Episode 37": { "720p": "link" }
-                    },
-                    "English Dub": {
-                    "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                    "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E2-480P.mp4" },
-                    "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E3-480P.mp4" },
-                    "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E4-480P.mp4" },
-                    "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E5-480P.mp4" },
-                    "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E6-480P.mp4" },
-                    "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E7-480P.mp4" },
-                    "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E8-480P.mp4" },
-                    "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E9-480P.mp4" },
-                    "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E10-480P.mp4" },
-                    "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E11-480P.mp4" },
-                    "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E12-480P.mp4" },
-                    "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E13-480P.mp4" },
-                    "Episode 14": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E14-480P.mp4" },
-                    "Episode 15": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E15-480P.mp4" },
-                    "Episode 16": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E16-480P.mp4" },
-                    "Episode 17": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E17-480P.mp4" },
-                    "Episode 18": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E18-480P.mp4" },
-                    "Episode 19": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E19-480P.mp4" },
-                    "Episode 20": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E20-480P.mp4" },
-                    "Episode 21": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E21-480P.mp4" },
-                    "Episode 22": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E22-480P.mp4" },
-                    "Episode 23": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E23-480P.mp4" },
-                    "Episode 24": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E24-480P.mp4" },
-                    "Episode 25": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E25-480P.mp4" },
-                    "Episode 26": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E26-480P.mp4" },
-                    "Episode 27": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E27-480P.mp4" },
-                    "Episode 28": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E28-480P.mp4" },
-                    "Episode 29": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E29-480P.mp4" },
-                    "Episode 30": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E30-480P.mp4" },
-                    "Episode 31": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E31-480P.mp4" },
-                    "Episode 32": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E32-480P.mp4" },
-                    "Episode 33": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E33-480P.mp4" },
-                    "Episode 34": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E34-480P.mp4" },
-                    "Episode 35": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E35-480P.mp4" },
-                    "Episode 36": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E36-480P.mp4" },
-                    "Episode 37": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E37-480P.mp4" }
-                    }
-                }
-            }
-        },
-        "Sakamoto Days": {
-            "poster": "https://m.media-amazon.com/images/M/MV5BNTM4MmZiNjEtOGY0MC00MGM0LTkxZjEtODUxMmJmZWEwOWU3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-            "seasons": {
-                "Season 1": {
-                    "Original Audio": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "Hindi Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "English Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                  }
-              },
-                "Season 2": {
-                    "Original Audio": {                        
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "Hindi Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "English Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                   }
-              }
+      "Death Note": {
+        "info": { "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnsx5G5rprTwWKmqLxJQEHZxwCoynDvMdGmg&s", "rating": "9.0" },
+        "Season 1": {
+          "Original Audio": {
+            "Episode 1": { "720p": "https://archive.org/download/death-note-s-1-e-1-720-p/Death%20Note-S1E1-720P.mp4" },
+            "Episode 2": { "720p": "https://archive.org/download/death-note-s-1-e-2-720-p/Death%20Note-S1E2-720P.mp4" },
+            "Episode 3": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E3-720P.mp4" },
+            "Episode 4": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E4-720P.mp4" },
+            "Episode 5": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E5-720P.mp4" },
+            "Episode 6": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E6-720P.mp4" },
+            "Episode 7": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E7-720P.mp4" },
+            "Episode 8": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E8-720P.mp4" },
+            "Episode 9": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p/Death%20Note-S1E9-720P.mp4" },
+            "Episode 10": { "720p": "https://archive.org/download/death-note-s-1-e-10-720-p/Death%20Note-S1E10-720P.mp4" },
+            "Episode 11": { "720p": "https://archive.org/download/death-note-s-1-e-10-720-p/Death%20Note-S1E11-720P.mp4" },
+            "Episode 12": { "720p": "https://archive.org/download/death-note-s-1-e-10-720-p/Death%20Note-S1E12-720P.mp4" },
+            "Episode 13": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E13-720P.mp4" },
+            "Episode 14": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E14-720P.mp4" },
+            "Episode 15": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E15-720P.mp4" },
+            "Episode 16": { "720p": "https://archive.org/download/death-note-s-1-e-14-720-p_202605/Death%20Note-S1E16-720P.mp4" },
+            "Episode 17": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E17-720P.mp4" },
+            "Episode 18": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E18-720P.mp4" },
+            "Episode 19": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E19-720P.mp4" },
+            "Episode 20": { "720p": "https://archive.org/download/death-note-s-1-e-17-720-p/Death%20Note-S1E20-720P.mp4" },
+            "Episode 21": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E21-720P.mp4" },
+            "Episode 22": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E22-720P.mp4" },
+            "Episode 23": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E23-720P.mp4" },
+            "Episode 24": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E24-720P.mp4" },
+            "Episode 25": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E25-720P.mp4" },
+            "Episode 26": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E26-720P.mp4" },
+            "Episode 27": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E27-720P.mp4" },
+            "Episode 28": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E28-720P.mp4" },
+            "Episode 29": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E29-480P.mp4" },
+            "Episode 30": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E30-480P.mp4" },
+            "Episode 31": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E31-720P.mp4" },
+            "Episode 32": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E32-480P.mp4" },
+            "Episode 33": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E33-720P.mp4" },
+            "Episode 34": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E34-720P.mp4" },
+            "Episode 35": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E35-720P.mp4" }, 
+            "Episode 36": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E36-720P.mp4" },
+            "Episode 37": { "720p": "https://archive.org/download/death-note-s-1-e-25-720-p/Death%20Note-S1E37-720P.mp4" }
+          },
+          "Hindi Dub": {
+            "Episode 1": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E1-480P.mp4" },
+            "Episode 2": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E2-480P.mp4" },
+            "Episode 3": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E3-480P.mp4" },
+            "Episode 4": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E4-480P.mp4" },
+            "Episode 5": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E5-480P.mp4" },
+            "Episode 6": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E6-480P.mp4" },
+            "Episode 7": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E7-480P.mp4" },
+            "Episode 8": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E8-480P.mp4" },
+            "Episode 9": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E9-480P.mp4" },
+            "Episode 10": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E10-480P.mp4" },
+            "Episode 11": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E11-480P.mp4" },
+            "Episode 12": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E12-480P.mp4" },
+            "Episode 13": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E13-480P.mp4" },
+            "Episode 14": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E14-480P.mp4" },
+            "Episode 15": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E15-480P.mp4" },
+            "Episode 16": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E16-480P.mp4" },
+            "Episode 17": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E17-480P.mp4" },
+            "Episode 18": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E18-480P.mp4" },
+            "Episode 19": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E19-480P.mp4" },
+            "Episode 20": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E20-480P.mp4" },
+            "Episode 21": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E21-480P.mp4" },
+            "Episode 22": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E22-480P.mp4" },
+            "Episode 23": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E23-480P.mp4" },
+            "Episode 24": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E24-480P.mp4" },
+            "Episode 25": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E25-480P.mp4" },
+            "Episode 26": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-35-480-p/Death%20Note%20%5BHindi%5D-S1E26-480P.mp4" },
+            "Episode 27": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-28-480-p/Death%20Note%20%5BHindi%5D-S1E27-480P.mp4" },
+            "Episode 28": { "720p": "https://archive.org/download/death-note-hindi-s-1-e-28-480-p/Death%20Note%20%5BHindi%5D-S1E28-480P.mp4" },
+            "Episode 29": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E29-480P.mp4" },
+            "Episode 30": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E30-480P.mp4" },
+            "Episode 31": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E31-480P.mp4" },
+            "Episode 32": { "720p": "https://archive.org/download/mp-4-2_202605/Death%20Note%20%5BHindi%5D-S1E32-480P.mp4" },
+            "Episode 33": { "720p": "link" },
+            "Episode 34": { "720p": "link" },
+            "Episode 35": { "720p": "link" },
+            "Episode 36": { "720p": "link" },
+            "Episode 37": { "720p": "link" }
+          },
+          "English Dub": {
+            "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
+            "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E2-480P.mp4" },
+            "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E3-480P.mp4" },
+            "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E4-480P.mp4" },
+            "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E5-480P.mp4" },
+            "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E6-480P.mp4" },
+            "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E7-480P.mp4" },
+            "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E8-480P.mp4" },
+            "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E9-480P.mp4" },
+            "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E10-480P.mp4" },
+            "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E11-480P.mp4" },
+            "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-11-480-p/Death%20Note%20%5BEnglish%5D-S1E12-480P.mp4" },
+            "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E13-480P.mp4" },
+            "Episode 14": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E14-480P.mp4" },
+            "Episode 15": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E15-480P.mp4" },
+            "Episode 16": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E16-480P.mp4" },
+            "Episode 17": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E17-480P.mp4" },
+            "Episode 18": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E18-480P.mp4" },
+            "Episode 19": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E19-480P.mp4" },
+            "Episode 20": { "720p": "https://archive.org/download/death-note-english-s-1-e-14-480-p/Death%20Note%20%5BEnglish%5D-S1E20-480P.mp4" },
+            "Episode 21": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E21-480P.mp4" },
+            "Episode 22": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E22-480P.mp4" },
+            "Episode 23": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E23-480P.mp4" },
+            "Episode 24": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E24-480P.mp4" },
+            "Episode 25": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E25-480P.mp4" },
+            "Episode 26": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E26-480P.mp4" },
+            "Episode 27": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E27-480P.mp4" },
+            "Episode 28": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E28-480P.mp4" },
+            "Episode 29": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E29-480P.mp4" },
+            "Episode 30": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E30-480P.mp4" },
+            "Episode 31": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E31-480P.mp4" },
+            "Episode 32": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E32-480P.mp4" },
+            "Episode 33": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E33-480P.mp4" },
+            "Episode 34": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E34-480P.mp4" },
+            "Episode 35": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E35-480P.mp4" },
+            "Episode 36": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E36-480P.mp4" },
+            "Episode 37": { "720p": "https://archive.org/download/death-note-english-s-1-e-34-480-p/Death%20Note%20%5BEnglish%5D-S1E37-480P.mp4" }
           }
+        }
       },
-        "Solo Leveling": {
-            "poster": "https://m.media-amazon.com/images/M/MV5BM2M4YzdkMTEtMjUyYy00ZWY0LWI5ODQtNGRkZWQ1MzU5MWM2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-            "seasons": {
-                "Season 1": {
-                    "Original Audio": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/solo-leveling-s-1-e-3-720-p/Solo%20Leveling-S1E3-720P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/solo-leveling-s-1-e-3-720-p/Solo%20Leveling-S1E4-720P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/solo-leveling-s-1-e-3-720-p/Solo%20Leveling-S1E5-720P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "Hindi Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "English Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                  }
-             },
-                "Season 2": {
-                    "Original Audio": {                        
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "Hindi Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    },
-                    "English Dub": {
-                        "Episode 1": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 2": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 3": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 4": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 5": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 6": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 7": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 8": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 9": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 10": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 11": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 12": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" },
-                        "Episode 13": { "720p": "https://archive.org/download/death-note-english-s-1-e-4-480-p/Death%20Note%20%5BEnglish%5D-S1E1-480P.mp4" }
-                    }
-                }
-            }
+
+      "Solo Leveling": {
+        "info": { "poster": "https://m.media-amazon.com/images/M/MV5BM2M4YzdkMTEtMjUyYy00ZWY0LWI5ODQtNGRkZWQ1MzU5MWM2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", "rating": "8.7" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "https://archive.org/download/solo-leveling-s-1-e-3-720-p/Solo%20Leveling-S1E3-720P.mp4", 
+            "Episode 4": "https://archive.org/download/solo-leveling-s-1-e-3-720-p/Solo%20Leveling-S1E4-720P.mp4", 
+            "Episode 5": "https://archive.org/download/solo-leveling-s-1-e-3-720-p/Solo%20Leveling-S1E5-720P.mp4" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        },
+        "Season 2": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
         }
+      },
+
+      "Tokyo Revengers": {
+        "info": { "poster": "https://media-cache.cinematerial.com/p/500x/hs71ooyf/tokyo-revengers-movie-poster.jpg?v=1694421083", "rating": "8.7" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E1-480P.mp4", 
+            "Episode 2": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E2-480P.mp4", 
+            "Episode 3": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E3-480P.mp4", 
+            "Episode 4": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E4-480P.mp4", 
+            "Episode 5": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E5-480P.mp4",
+            "Episode 6": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E6-480P.mp4", 
+            "Episode 7": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E7-480P.mp4", 
+            "Episode 8": "https://archive.org/download/tokyo-revengers-hindi-s-1-e-1-480-p/Tokyo%20Revengers%20%5BHindi%5D-S1E8-480P.mp4", 
+            "Episode 9": "link", 
+            "Episode 10": "link",
+            "Episode 11": "link", 
+            "Episode 12": "link", 
+            "Episode 13": "link", 
+            "Episode 14": "link", 
+            "Episode 15": "link",
+            "Episode 16": "link", 
+            "Episode 17": "link", 
+            "Episode 18": "link", 
+            "Episode 19": "link", 
+            "Episode 20": "link"
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        },
+        "Season 2": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      },
+
+      "Black Clover": {
+        "info": { "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvUKY5QyRXTEnro5dSBk6MF_WTaKWFq16VjQ&s", "rating": "7.2" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      },
+
+      "One Piece": {
+        "info": { "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvtctxEKPODXyQW7LjXqqPsBhj7ORiYHsIfg&s", "rating": "8.9" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      },
+
+      "Demon Slayer_ Kimetsu no Yaiba": {
+        "info": { "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqLSe0YxHCOtJikJKKAC5nm7NmlqwyXG1tWA&s", "rating": "8.6" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link",
+            "Episode 6": "link", 
+            "Episode 7": "link", 
+            "Episode 8": "link", 
+            "Episode 9": "link", 
+            "Episode 10": "link",
+            "Episode 11": "link", 
+            "Episode 12": "link", 
+            "Episode 13": "link", 
+            "Episode 14": "link", 
+            "Episode 15": "link",
+            "Episode 16": "link", 
+            "Episode 17": "link", 
+            "Episode 18": "link", 
+            "Episode 19": "link", 
+            "Episode 20": "link"
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link",
+            "Episode 6": "link", 
+            "Episode 7": "link", 
+            "Episode 8": "link", 
+            "Episode 9": "link", 
+            "Episode 10": "link",
+            "Episode 11": "link", 
+            "Episode 12": "link", 
+            "Episode 13": "link", 
+            "Episode 14": "link", 
+            "Episode 15": "link",
+            "Episode 16": "link", 
+            "Episode 17": "link", 
+            "Episode 18": "link", 
+            "Episode 19": "link", 
+            "Episode 20": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link",
+            "Episode 6": "link", 
+            "Episode 7": "link", 
+            "Episode 8": "link", 
+            "Episode 9": "link", 
+            "Episode 10": "link",
+            "Episode 11": "link", 
+            "Episode 12": "link", 
+            "Episode 13": "link", 
+            "Episode 14": "link", 
+            "Episode 15": "link",
+            "Episode 16": "link", 
+            "Episode 17": "link", 
+            "Episode 18": "link", 
+            "Episode 19": "link", 
+            "Episode 20": "link" 
+          }
+        },
+        "Season 2": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link",
+            "Episode 6": "link", 
+            "Episode 7": "link", 
+            "Episode 8": "link", 
+            "Episode 9": "link", 
+            "Episode 10": "link",
+            "Episode 11": "link", 
+            "Episode 12": "link", 
+            "Episode 13": "link", 
+            "Episode 14": "link", 
+            "Episode 15": "link",
+            "Episode 16": "link", 
+            "Episode 17": "link", 
+            "Episode 18": "link", 
+            "Episode 19": "link", 
+            "Episode 20": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E2-480P.mp4", 
+            "Episode 3": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E3-480P.mp4", 
+            "Episode 4": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E4-480P.mp4", 
+            "Episode 5": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E5-480P.mp4",
+            "Episode 6": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E6-480P.mp4", 
+            "Episode 7": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E7-480P.mp4", 
+            "Episode 8": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E8-480P.mp4", 
+            "Episode 9": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-8-480-p_202606/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E9-480P.mp4", 
+            "Episode 10": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E10-480P.mp4",
+            "Episode 11": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E11-480P.mp4", 
+            "Episode 12": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E12-480P.mp4", 
+            "Episode 13": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E13-480P.mp4", 
+            "Episode 14": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E14-480P.mp4", 
+            "Episode 15": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E15-480P.mp4",
+            "Episode 16": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E16-480P.mp4", 
+            "Episode 17": "https://archive.org/download/demon-slayer-kimetsu-no-yaiba-hindi-s-2-e-17-480-p/Demon%20Slayer_%20Kimetsu%20no%20Yaiba%20%5BHindi%5D-S2E17-480P.mp4", 
+            "Episode 18": "link", 
+            "Episode 19": "link", 
+            "Episode 20": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link",
+            "Episode 6": "link", 
+            "Episode 7": "link", 
+            "Episode 8": "link", 
+            "Episode 9": "link", 
+            "Episode 10": "link",
+            "Episode 11": "link", 
+            "Episode 12": "link", 
+            "Episode 13": "link", 
+            "Episode 14": "link", 
+            "Episode 15": "link",
+            "Episode 16": "link", 
+            "Episode 17": "link", 
+            "Episode 18": "link", 
+            "Episode 19": "link", 
+            "Episode 20": "link" 
+          }
+        }
+      },
+
+      "Jujutsu Kaisen": {
+        "info": { "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTbgbLBB-3oVK_OhY1vJ4EOBkN6aQA1yKxwg&s", "rating": "8.6" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      },
+
+      "Monster": {
+        "info": { "poster": "https://upload.wikimedia.org/wikipedia/en/2/2d/Monster_%28manga_-_promo_image%29.jpg", "rating": "8.7" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      },
+
+      "Attack on Titan": {
+        "info": { "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG7GljTfEqWuOz2NmvdwwQRqVmkn2mdCkfiA&s", "rating": "9.1" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      },
+
+      "My Hero Academia": {
+        "info": { "poster": "https://m.media-amazon.com/images/M/MV5BY2QzODA5OTQtYWJlNi00ZjIzLThhNTItMDMwODhlYzYzMjA2XkEyXkFqcGc@._V1_.jpg", "rating": "7.9" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      },
+
+      "Sakamoto Days": {
+        "info": { "poster": "https://m.media-amazon.com/images/M/MV5BNTM4MmZiNjEtOGY0MC00MGM0LTkxZjEtODUxMmJmZWEwOWU3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", "rating": "8.5" },
+        "Season 1": {
+          "Original Audio": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "Hindi Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          },
+          "English Dub": { 
+            "Episode 1": "link", 
+            "Episode 2": "link", 
+            "Episode 3": "link", 
+            "Episode 4": "link", 
+            "Episode 5": "link" 
+          }
+        }
+      }
     };
-    let currentSelectedAnime = "";
-    const mainHeader = document.getElementById('mainHeader');
-    const landingPage = document.getElementById('landingPage');
-    const playerPage = document.getElementById('playerPage');
-    const animeGrid = document.getElementById('animeGrid');
-    const searchBar = document.getElementById('searchBar');
-    const animeSelect = document.getElementById('animeSelect');
-    const seasonSelect = document.getElementById('seasonSelect');
-    const languageSelect = document.getElementById('languageSelect');
-    const episodeSelect = document.getElementById('episodeSelect');
-    const videoFrame = document.getElementById('animeVideoFrame');
-    const bypassLayer = document.getElementById('bypassLayer');
 
-    // 1. Render Box Cards using JavaScript
-    function renderGrid(filterText = "") {
-        animeGrid.innerHTML = "";
-        const animeTitles = Object.keys(animeData);
-        animeTitles.forEach(title => {
-            if (title.toLowerCase().includes(filterText.toLowerCase())) {
-                const card = document.createElement('div');
-                card.className = "anime-card";
-                card.setAttribute('onclick', `openPlayer('${title.replace(/'/g, "\\'")}')`);
-                
-                const posterUrl = animeData[title].poster || "https://via.placeholder.com/200x300?text=No+Image";
-                card.innerHTML = `
-                    <img src="${posterUrl}" alt="${title}">
-                    <div class="anime-info">
-                        <h3>${title}</h3>
-                    </div>
-                `;
-                animeGrid.appendChild(card);
-            }
-        });
+    let currentAnime = "";
+    const player = document.getElementById('videoPlayer');
+
+    function displayAnime(data) {
+      const grid = document.getElementById('animeGrid');
+      grid.innerHTML = '';
+      for (let animeName in data) {
+        const anime = data[animeName];
+        const card = document.createElement('div');
+        card.className = 'anime-card';
+        card.innerHTML = `
+          <img src="${anime.info.poster}" alt="${animeName}" onerror="this.src='https://via.placeholder.com/200x280?text=${encodeURIComponent(animeName)}'">
+          <div class="anime-info">
+            <h3>${animeName}</h3>
+            <p>Rating: ⭐ ${anime.info.rating}</p>
+          </div>
+        `;
+        card.addEventListener('click', () => loadAnimeToPlayer(animeName));
+        grid.appendChild(card);
+      }
     }
 
-    searchBar.addEventListener('input', (e) => {
-        renderGrid(e.target.value);
-    });
+    function loadAnimeToPlayer(animeName) {
+      currentAnime = animeName;
+      document.getElementById('playingTitle').innerText = `Now Playing: ${animeName}`;
+      document.getElementById('playerSection').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('playerSection').offsetTop - 20, behavior: 'smooth' });
+      const seasons = Object.keys(animeData[animeName]).filter(key => key !== 'info');
+      const seasonSelect = document.getElementById('seasonSelect');
+      
+      seasonSelect.innerHTML = '';
+      seasons.forEach(season => {
+        seasonSelect.innerHTML += `<option value="${season}">${season}</option>`;
+      });
+      updateLanguages();
+    }
 
-    window.openPlayer = function(animeName) {
-        currentSelectedAnime = animeName;
-        animeSelect.value = animeName;
-        landingPage.style.display = 'none';
-        mainHeader.style.display = 'none';
-        playerPage.style.display = 'flex';
+    function updateLanguages() {
+      const seasonSelect = document.getElementById('seasonSelect').value;
+      const languages = Object.keys(animeData[currentAnime][seasonSelect]);
+      const languageSelect = document.getElementById('languageSelect');
+
+      languageSelect.innerHTML = '';
+      languages.forEach(lang => {
+        languageSelect.innerHTML += `<option value="${lang}">${lang}</option>`;
+      });
+      updateEpisodes();
+    }
+
+    function updateEpisodes() {
+      const seasonSelect = document.getElementById('seasonSelect').value;
+      const languageSelect = document.getElementById('languageSelect').value;
+      const episodes = Object.keys(animeData[currentAnime][seasonSelect][languageSelect]);
+      const episodeSelect = document.getElementById('episodeSelect');
+
+      episodeSelect.innerHTML = '';
+      episodes.forEach(ep => {
+        episodeSelect.innerHTML += `<option value="${ep}">${ep}</option>`;
+      });
+      playVideo();
+    }
+
+    function playVideo() {
+      const seasonSelect = document.getElementById('seasonSelect').value;
+      const languageSelect = document.getElementById('languageSelect').value;
+      const episodeSelect = document.getElementById('episodeSelect').value;
+      
+      let videoUrl = animeData[currentAnime][seasonSelect][languageSelect][episodeSelect];
+      
+      if (typeof videoUrl === 'object' && videoUrl !== null) {
+          videoUrl = videoUrl["720p"] || videoUrl["1080p"] || videoUrl["480p"];
+      }
+
+      if(videoUrl && videoUrl !== "link") {
+        player.src = videoUrl;
+        player.load();
+      } else {
+        player.src = "";
+        alert("This episode link is just a placeholder ('link')! Please add real links in the code.");
+      }
+    }
+
+    // --- SEQUENTIAL AD ROTATION SYSTEM ---
+    function launchAd() {
+      if(adsterraUrls.length > 0) {
+        const currentAdUrl = adsterraUrls[currentAdIndex];
         
-        seasonSelect.innerHTML = '<option value="">Select Season</option>';
-        languageSelect.innerHTML = '<option value="">Select Language</option>';
-        episodeSelect.innerHTML = '<option value="">Select Episode</option>';
-        languageSelect.disabled = true;
-        episodeSelect.disabled = true;
-
-        if (animeData[animeName] && animeData[animeName].seasons) {
-            for (let season in animeData[animeName].seasons) {
-                let option = document.createElement('option');
-                option.value = season;
-                option.innerText = season;
-                seasonSelect.appendChild(option);
-            }
+        if(currentAdUrl && !currentAdUrl.includes("YOUR_ADSTERRA_DIRECT_LINK")) {
+          window.open(currentAdUrl, '_blank');
         }
+        
+        currentAdIndex = (currentAdIndex + 1) % adsterraUrls.length;
+      }
     }
 
-    window.backToHome = function() {
-        playerPage.style.display = 'none';
-        landingPage.style.display = 'block';
-        mainHeader.style.display = 'block';
-        videoFrame.src = "";
-        bypassLayer.style.display = 'none';
-        currentSelectedAnime = "";
-        searchBar.value = "";
-        renderGrid();
-    }
+    player.addEventListener('play', () => {
+      launchAd();
+      
+      if(!adTimer) {
+        adTimer = setInterval(() => {
+          launchAd();
+        }, 10 * 60 * 1000); // 10 minutes loop
+      }
+    });
 
-    seasonSelect.addEventListener('change', () => {
-        languageSelect.innerHTML = '<option value="">Select Language</option>';
-        episodeSelect.innerHTML = '<option value="">Select Episode</option>';
-        languageSelect.disabled = true;
-        episodeSelect.disabled = true;
-        videoFrame.src = "";
-        bypassLayer.style.display = 'none';
+    player.addEventListener('pause', () => {
+      clearInterval(adTimer);
+      adTimer = null;
+    });
 
-        const season = seasonSelect.value;
-        if (season && animeData[currentSelectedAnime].seasons[season]) {
-            languageSelect.disabled = false;
-            for (let lang in animeData[currentSelectedAnime].seasons[season]) {
-                let option = document.createElement('option');
-                option.value = lang;
-                option.innerText = lang;
-                languageSelect.appendChild(option);
-            }
+    player.addEventListener('ended', () => {
+      clearInterval(adTimer);
+      adTimer = null;
+    });
+
+    document.getElementById('seasonSelect').addEventListener('change', updateLanguages);
+    document.getElementById('languageSelect').addEventListener('change', updateEpisodes);
+    document.getElementById('episodeSelect').addEventListener('change', playVideo);
+    document.getElementById('searchBar').addEventListener('input', (e) => {
+      const searchTxt = e.target.value.toLowerCase();
+      const filteredData = {};
+      
+      for (let name in animeData) {
+        if (name.toLowerCase().includes(searchTxt)) {
+          filteredData[name] = animeData[name];
         }
+      }
+      displayAnime(filteredData);
     });
-
-    languageSelect.addEventListener('change', () => {
-        episodeSelect.innerHTML = '<option value="">Select Episode</option>';
-        episodeSelect.disabled = true;
-        videoFrame.src = "";
-        bypassLayer.style.display = 'none';
-
-        const season = seasonSelect.value;
-        const lang = languageSelect.value;
-        if (lang && animeData[currentSelectedAnime].seasons[season][lang]) {
-            episodeSelect.disabled = false;
-            for (let ep in animeData[currentSelectedAnime].seasons[season][lang]) {
-                let option = document.createElement('option');
-                option.value = ep;
-                option.innerText = ep;
-                episodeSelect.appendChild(option);
-            }
-        }
-    });
-
-    episodeSelect.addEventListener('change', () => {
-        const season = seasonSelect.value;
-        const lang = languageSelect.value;
-        const ep = episodeSelect.value;
-
-        if (ep && animeData[currentSelectedAnime].seasons[season][lang][ep]) {
-            const videoUrl = animeData[currentSelectedAnime].seasons[season][lang][ep]["720p"];
-            if (videoUrl && videoUrl !== "" && videoUrl !== "link") {
-                videoFrame.src = videoUrl;
-                bypassLayer.style.display = 'block';
-            } else {
-                videoFrame.src = "";
-                alert("This episode link is not updated yet!");
-                bypassLayer.style.display = 'none';
-            }
-        }
-    });
-
-    bypassLayer.addEventListener('click', () => {
-        window.open('https://www.effectivecpmnetwork.com/gns647cz?key=de64eff6e82ffd4227fef5e3612071c8', '_blank'); 
-        bypassLayer.style.display = 'none';
-    });
-
-    const adOverlay = document.getElementById('adOverlay');
-    const adLink = document.getElementById('adLink');
-    const closeAdBtn = document.getElementById('closeAdBtn');
-
-    setInterval(() => {
-        if(videoFrame.src !== "" && videoFrame.src !== window.location.href) {
-            showAdPopup();
-        }
-    }, 300000);
-
-    function showAdPopup() {
-        if (adOverlay.style.display === 'flex') return;
-        adOverlay.style.display = 'flex';
-        adLink.style.display = 'inline-block'; 
-        closeAdBtn.style.display = 'none';
-    }
-
-    adLink.addEventListener('click', () => {
-        setTimeout(() => {
-            adLink.style.display = 'none';
-            closeAdBtn.style.display = 'inline-block';
-        }, 3000);
-    });
-
-    closeAdBtn.addEventListener('click', () => {
-        adOverlay.style.display = 'none';
-    });
-
-    // Initial render
-    renderGrid();
-</script>
-
+    window.onload = () => {
+      displayAnime(animeData);
+    };
+  </script>
 </body>
 </html>
