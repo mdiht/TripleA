@@ -61,6 +61,25 @@
     .btn-buy { background: #ff4757; color: white; }
     .btn-buy:hover { background: #e84118; }
 
+    /* Custom Private Chat System CSS */
+    .chat-section { max-width: 1000px; margin: 30px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #ddd; text-align: left; }
+    .chat-section h3 { margin-top: 0; color: #333; display: flex; justify-content: space-between; align-items: center; }
+    .chat-box { max-height: 250px; overflow-y: auto; border: 1px solid #eee; padding: 15px; border-radius: 5px; background: #fafafa; margin-bottom: 15px; }
+    .chat-message { margin-bottom: 10px; padding: 8px 12px; border-radius: 15px; max-width: 75%; font-size: 14px; line-height: 1.4; }
+    .msg-customer { background: #e1ffc7; align-self: flex-end; margin-left: auto; text-align: right; border-bottom-right-radius: 0; }
+    .msg-admin { background: #fff; border: 1px solid #ddd; align-self: flex-start; border-bottom-left-radius: 0; }
+    .chat-inputs { display: flex; gap: 10px; margin-bottom: 10px; }
+    .admin-toggle-btn { background: #333; color: white; border: none; padding: 5px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; }
+
+    /* Review System CSS */
+    .reviews-section { max-width: 1000px; margin: 30px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #ddd; text-align: left; }
+    .reviews-section h3 { margin-top: 0; color: #333; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+    .review-img-preview { max-width: 100px; max-height: 100px; border-radius: 6px; margin-top: 8px; object-fit: cover; border: 1px solid #ddd; cursor: zoom-in; }
+
+    /* Related Products CSS */
+    .related-products-section { max-width: 1000px; margin: 40px auto; padding: 20px; border-top: 2px dashed #ddd; text-align: left; }
+    .related-products-section h3 { color: #222; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+
     /* Fullscreen Image Lightbox CSS */
     .lightbox-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 2000; justify-content: center; align-items: center; cursor: zoom-out; }
     .lightbox-img { max-width: 90%; max-height: 90%; border-radius: 5px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); animation: zoomIn 0.2s ease-in-out; }
@@ -116,28 +135,97 @@
     <button class="back-btn" onclick="closeModal('productModal')"><span>&#8592;</span> Back</button>
   </div>
   
-  <div class="product-view-container" id="productDetailView">
-    <div class="image-gallery">
-      <!-- ছবিতে ক্লিক করলে ফুলস্ক্রিন হওয়ার জন্য onclick ইভেন্ট যোগ করা হয়েছে -->
-      <img id="mainSliderImg" class="main-image" src="" onclick="openLightbox()" title="Click to view full screen">
-      <div class="thumbnail-row" id="thumbnailRow"></div>
+  <div id="mainModalContentWrapper">
+    <div class="product-view-container" id="productDetailView">
+      <div class="image-gallery">
+        <img id="mainSliderImg" class="main-image" src="" onclick="openLightbox(this.src)" title="Click to view full screen">
+        <div class="thumbnail-row" id="thumbnailRow"></div>
+      </div>
+      
+      <div class="product-details">
+        <h2 id="modalTitle">Product Title</h2>
+        <div class="stars" id="modalReviews">&#9734;&#9734;&#9734;&#9734;&#9734; (0 Reviews)</div>
+        <p class="price" id="modalPrice">0 BDT</p>
+        <p class="desc" id="modalDesc">Product description goes here.</p>
+
+        <div class="form-group" id="sizeGroup">
+          <label id="sizeLabel">Select Size</label>
+          <select id="sizeSelect" onchange="updateViewPrice()"></select>
+        </div>
+
+        <div class="action-btns">
+          <button class="btn btn-cart" onclick="addToCart()">Add to Cart</button>
+          <button class="btn btn-buy" onclick="showOrderForm(false)">Buy Now</button>
+        </div>
+      </div>
     </div>
-    
-    <div class="product-details">
-      <h2 id="modalTitle">Product Title</h2>
-      <div class="stars" id="modalReviews">&#9733;&#9733;&#9733;&#9733;&#9734; (0 Reviews)</div>
-      <p class="price" id="modalPrice">0 BDT</p>
-      <p class="desc" id="modalDesc">Product description goes here.</p>
 
-      <div class="form-group" id="sizeGroup">
-        <label id="sizeLabel">Select Size</label>
-        <select id="sizeSelect" onchange="updateViewPrice()"></select>
+    <!-- Product Specific Private Chat Section -->
+    <div class="chat-section" id="productChatSection">
+      <h3>
+        <span>💬 Private Inbox Chat</span>
+        <button class="admin-toggle-btn" id="adminBtn" onclick="toggleAdminMode()">Admin Login</button>
+      </h3>
+      
+      <!-- Admin Chat Selector -->
+      <div id="adminUserSelectContainer" style="display: none; margin-bottom: 12px; background: #f1f1f1; padding: 8px; border-radius: 4px;">
+        <label style="font-size: 13px; font-weight: bold; color: #555;">Select Customer Thread: </label>
+        <select id="chatUserSelect" onchange="loadChatMessages(currentP.title)" style="padding: 5px; width: auto; display: inline-block; font-size: 13px; margin-left: 5px;"></select>
       </div>
 
-      <div class="action-btns">
-        <button class="btn btn-cart" onclick="addToCart()">Add to Cart</button>
-        <button class="btn btn-buy" onclick="showOrderForm(false)">Buy Now</button>
+      <div class="chat-box" id="chatBox"></div>
+      <div class="chat-inputs">
+        <input type="text" id="chatInput" placeholder="Ask something about this product...">
+        <button class="btn btn-buy" style="flex: 0 0 100px; padding: 10px;" onclick="sendChatMessage()">Send</button>
       </div>
+    </div>
+
+    <!-- Dynamic Review & Rating Section with Image Upload -->
+    <div class="reviews-section" id="productReviewsSection">
+      <h3>📊 Customer Reviews & Ratings</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 25px;">
+        <!-- Rating Metrics Summary Box -->
+        <div style="background: #fafafa; border: 1px solid #eee; padding: 20px; border-radius: 8px; text-align: center; min-width: 160px; box-sizing: border-box;">
+          <h1 id="averageRatingDisplay" style="margin: 0; font-size: 46px; color: #ff4757;">0.0</h1>
+          <p style="margin: 4px 0 0 0; color: #666; font-size: 14px;">out of 5</p>
+          <div class="stars" id="averageStarsDisplay" style="font-size: 18px; margin-top: 6px;"></div>
+          <small id="totalReviewsCountDisplay" style="color: #888; display: block; margin-top: 5px;"></small>
+        </div>
+        
+        <!-- Write Review Form Container -->
+        <div style="flex: 1; min-width: 260px;">
+          <h4 style="margin: 0 0 12px 0; color: #333;">Write a Review</h4>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <input type="text" id="reviewName" placeholder="Your Name (Optional)" style="padding: 8px; font-size: 14px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <select id="reviewRating" style="padding: 8px; font-size: 14px;">
+              <option value="5">⭐⭐⭐⭐⭐ (5 Star Rating)</option>
+              <option value="4">⭐⭐⭐⭐ (4 Star Rating)</option>
+              <option value="3">⭐⭐⭐ (3 Star Rating)</option>
+              <option value="2">⭐⭐ (2 Star Rating)</option>
+              <option value="1">⭐ (1 Star Rating)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">Attach Image (Optional)</label>
+            <input type="file" id="reviewImage" accept="image/*" style="padding: 5px; font-size: 13px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 10px;">
+            <textarea id="reviewComment" placeholder="Write your valuable experience here..." rows="2" style="padding: 8px; font-size: 14px;"></textarea>
+          </div>
+          <button class="btn btn-buy" style="padding: 8px 16px; font-size: 14px; width: auto; border-radius: 4px;" onclick="submitReview()">Submit Review</button>
+        </div>
+      </div>
+      
+      <!-- List of comments -->
+      <div id="reviewsList" style="max-height: 350px; overflow-y: auto; border-top: 1px solid #eee; padding-top: 15px;"></div>
+    </div>
+
+    <!-- Related Products Section -->
+    <div class="related-products-section">
+      <h3>You May Also Like</h3>
+      <div id="relatedProductGrid" class="product-grid"></div>
     </div>
   </div>
 
@@ -197,102 +285,116 @@
   </div>
 </div>
 
-<!-- Image Lightbox Modal HTML (ফুলস্ক্রিন ইমেজ ভিউ) -->
+<!-- Image Lightbox Modal -->
 <div id="imageLightboxModal" class="lightbox-overlay" onclick="closeLightbox()">
   <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
   <img id="lightboxImg" class="lightbox-img" src="">
 </div>
 
 <script>
-  // Product Database
+  // Product Database updated with all default ratings set to 0[cite: 1]
   const products = [
     { 
       title: "Levi Ackerman Premium T-Shirt", type: "T-Shirt", price: 500, 
       images: ["https://i.ibb.co.com/MyM31b5V/657271574-122177027318743567-3520612459997123059-n.jpg"],
       description: "High-quality comfortable cotton T-shirt featuring Levi Ackerman from Attack on Titan. DTF print ensures long-lasting colors.",
-      reviews: { rating: 5, count: 4 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
       title: "Eren & Mikasa T-shirt", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/rRG3X7LN/5.png", "https://i.ibb.co.com/mCKhvVs7/6.png"],
       description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.8, count: 15 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
       title: "Mikasa Ackerman soft T-shirt", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/fcqDgNc/655785019-122177027762743567-1928302109426635733-n.jpg"],
       description: "Premium Mikasa Ackerman from Attack on Titan design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 3.8, count: 3 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
-      title: "Eren & Mikasa T-shirt", type: "T-Shirt", price: 550, 
+      title: "Eren & Mikasa T-shirt 2", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/tT60pWbh/9.png", "https://i.ibb.co.com/4RtkQSKf/10.png"],
       description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.8, count: 15 }    },
+      reviews: { rating: 0, count: 0 }    },
     { 
       title: "Madara Uchiha T-shirt", type: "T-Shirt", price: 570, 
       images: ["https://i.ibb.co.com/JW2FMDCn/655660752-122177027384743567-5207846785072003610-n.jpg"],
       description: "Premium Madara Uchiha from Naruto design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.8, count: 15 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
       title: "Itachi Uchiha T-shirt", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/G4qjF2fx/2.png", "https://i.ibb.co.com/JwZQbng0/1.png"],
       description: "Premium Uchiha Itachi from Naruto design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.8, count: 15 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
       title: "Eren Yeager & Mikasa Ackerman T-shirt", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/Wv6kBLFQ/3.png", "https://i.ibb.co.com/4Rfz07KQ/4.png"],
       description: "Premium Eren & Mikasa from AOT couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.0, count: 1 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
-      title: "Itachi Uchiha T-shirt", type: "T-Shirt", price: 550, 
+      title: "Itachi Uchiha T-shirt Premium", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/GQ9tdJM1/12.png", "https://i.ibb.co.com/tTpP1RkG/11.png"],
       description: "Premium Itachi Uchiha from Naruto design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.8, count: 10 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
       title: "kakashi Hatake T-shirt", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/gZWNHVVN/19.png", "https://i.ibb.co.com/tTfQZfnz/20.png"],
       description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.8, count: 15 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
-      title: "Uchiha Itachi T-shirt", type: "T-Shirt", price: 550, 
+      title: "Uchiha Itachi T-shirt V2", type: "T-Shirt", price: 550, 
       images: ["https://i.ibb.co.com/Txx0BsBq/17.png", "https://i.ibb.co.com/BVpwdfnK/18.png"],
       description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.8, count: 15 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
       title: "Eren Yeager T-shirt", type: "T-Shirt", price: 500, 
       images: ["https://i.ibb.co.com/pvfXSNNy/656146601-122177027750743567-1604655941251105135-n.jpg"],
       description: "Premium Eren Yeager from Attack on Titen (AOT) design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 4.1, count: 5 }
+      reviews: { rating: 0, count: 0 }
     },
     { 
       title: "Roronoa Zoro 10 piece Combo Wallmate", type: "Wall Mate", price: 399, 
       images: ["https://i.ibb.co.com/N2RX7s2c/42610354760.png", "https://i.ibb.co.com/N2RX7s2c/42610354760.png"],
       description: "Decorate your room with the ultimate Zoro wallmate combo. Comes with double-sided tape for easy setup.",
-      reviews: { rating: 4.5, count: 42 }
+      reviews: { rating: 0, count: 0 }
     }
   ];
 
   let currentCategory = 'all';
   let currentP = null;
   let cart = [];
+  let isAdminMode = false;
+
+  // Generate Unique ID per Browser Session for 1-on-1 Personal Chatting
+  let myUserId = localStorage.getItem('shop_userId');
+  if (!myUserId) {
+    myUserId = 'Client_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+    localStorage.setItem('shop_userId', myUserId);
+  }
 
   function renderGrid(data) {
     const grid = document.getElementById('productGrid');
     grid.innerHTML = data.map(p => {
-      let starsHtml = '&#9733;'.repeat(Math.floor(p.reviews.rating)) + '&#9734;'.repeat(5 - Math.floor(p.reviews.rating));
+      let localReviews = JSON.parse(localStorage.getItem('reviews_' + p.title)) || [];
+      let tCount = p.reviews.count + localReviews.length;
+      let tSum = (p.reviews.rating * p.reviews.count);
+      localReviews.forEach(r => tSum += parseFloat(r.rating));
+      let currentAvg = tCount > 0 ? (tSum / tCount).toFixed(1) : "0.0";
+
+      let starsHtml = '&#9733;'.repeat(Math.floor(currentAvg)) + '&#9734;'.repeat(5 - Math.floor(currentAvg));
       return `
       <div class="product-card" onclick='openModal(${JSON.stringify(p).replace(/"/g, "&quot;")})'>
         <img src="${p.images[0]}" alt="${p.title}">
         <div class="product-info">
           <h3>${p.title}</h3>
-          <div class="stars">${starsHtml} (${p.reviews.count})</div>
+          <div class="stars">${starsHtml} (${tCount})</div>
           <p class="price">${p.price} BDT</p>
         </div>
       </div>
@@ -315,14 +417,16 @@
     currentP = p;
     document.getElementById('productModal').style.display = 'block';
     document.getElementById('orderFormSection').style.display = 'none';
+    document.getElementById('mainModalContentWrapper').style.display = 'block';
     document.getElementById('productDetailView').style.display = 'flex';
+    
+    document.getElementById('productModal').scrollTop = 0;
     document.body.style.overflow = 'hidden';
 
     // Set Data
     document.getElementById('mainSliderImg').src = p.images[0];
     document.getElementById('modalTitle').innerText = p.title;
     document.getElementById('modalDesc').innerText = p.description;
-    document.getElementById('modalReviews').innerHTML = `&#9733;`.repeat(Math.floor(p.reviews.rating)) + ` (${p.reviews.count} Reviews)`;
 
     // Thumbnails
     const thumbs = document.getElementById('thumbnailRow');
@@ -339,6 +443,9 @@
     }
     
     updateViewPrice();
+    loadChatMessages(p.title);
+    loadReviews(p);
+    renderRelatedProducts(p);
   }
 
   function changeMainImage(src, element) {
@@ -354,11 +461,237 @@
     return price;
   }
 
-  /* Lightbox Logic (ফুলস্ক্রিন ইমেজ ভিউ এর জন্য ফাংশন) */
-  function openLightbox() {
-    const mainImgSrc = document.getElementById('mainSliderImg').src;
-    if(!mainImgSrc) return;
-    document.getElementById('lightboxImg').src = mainImgSrc;
+  /* 1-on-1 Inbox Chat Feature Logic */
+  function toggleAdminMode() {
+    if (!isAdminMode) {
+      let pass = prompt("Enter Admin Password:");
+      if (pass === "admin123") {
+        isAdminMode = true;
+        document.getElementById('adminBtn').innerText = "Admin Mode: ON";
+        document.getElementById('chatInput').placeholder = "Type private reply as Admin...";
+        alert("Admin Interface Activated!");
+      } else {
+        alert("Incorrect Admin Security Password!");
+      }
+    } else {
+      isAdminMode = false;
+      document.getElementById('adminBtn').innerText = "Admin Login";
+      document.getElementById('chatInput').placeholder = "Ask something about this product...";
+    }
+    loadChatMessages(currentP.title);
+  }
+
+  function loadChatMessages(productTitle) {
+    const chatBox = document.getElementById('chatBox');
+    const selectContainer = document.getElementById('adminUserSelectContainer');
+    const userSelect = document.getElementById('chatUserSelect');
+    
+    let allChats = JSON.parse(localStorage.getItem('chats_' + productTitle)) || [];
+    
+    if (isAdminMode) {
+      selectContainer.style.display = 'block';
+      let uniqueUsers = [...new Set(allChats.map(c => c.userId))];
+      let currentSelected = userSelect.value;
+      
+      userSelect.innerHTML = uniqueUsers.map(uid => `<option value="${uid}">${uid}</option>`).join('');
+      
+      if (uniqueUsers.length === 0) {
+        userSelect.innerHTML = '<option value="">No Active Chats</option>';
+        chatBox.innerHTML = `<p style="text-align:center; color:#999; font-size:13px;">No inquiries from customers yet.</p>`;
+        return;
+      }
+      
+      if (currentSelected && uniqueUsers.includes(currentSelected)) {
+        userSelect.value = currentSelected;
+      }
+      
+      let activeUser = userSelect.value;
+      let filteredChats = allChats.filter(c => c.userId === activeUser);
+      renderChatHTML(filteredChats);
+    } else {
+      selectContainer.style.display = 'none';
+      let filteredChats = allChats.filter(c => c.userId === myUserId);
+      renderChatHTML(filteredChats);
+    }
+  }
+
+  function renderChatHTML(chats) {
+    const chatBox = document.getElementById('chatBox');
+    if(chats.length === 0) {
+      chatBox.innerHTML = `<p style="text-align:center; color:#999; font-size:13px;">No conversion history. Send a message to start!</p>`;
+      return;
+    }
+    chatBox.innerHTML = chats.map(msg => {
+      let className = msg.sender === 'admin' ? 'msg-admin' : 'msg-customer';
+      let senderLabel = msg.sender === 'admin' ? '<b>Shop Owner:</b> ' : '<b>You:</b> ';
+      if (isAdminMode && msg.sender === 'customer') senderLabel = '<b>Customer:</b> ';
+      return `<div class="chat-message ${className}">${senderLabel}${msg.text}</div>`;
+    }).join('');
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    let allChats = JSON.parse(localStorage.getItem('chats_' + currentP.title)) || [];
+    let targetUserId = myUserId;
+
+    if (isAdminMode) {
+      targetUserId = document.getElementById('chatUserSelect').value;
+      if (!targetUserId) {
+        alert("Please pick a customer thread from dropdown to message.");
+        return;
+      }
+    }
+
+    allChats.push({
+      sender: isAdminMode ? 'admin' : 'customer',
+      userId: targetUserId,
+      text: text
+    });
+
+    localStorage.setItem('chats_' + currentP.title, JSON.stringify(allChats));
+    input.value = '';
+    loadChatMessages(currentP.title);
+  }
+
+  /* Dynamic Review System with Base64 Image Support */
+  function loadReviews(p) {
+    let localReviews = JSON.parse(localStorage.getItem('reviews_' + p.title)) || [];
+    
+    let initialCount = p.reviews.count;
+    let initialRating = p.reviews.rating;
+    
+    let totalCount = initialCount + localReviews.length;
+    let totalSum = (initialRating * initialCount);
+    localReviews.forEach(r => totalSum += parseFloat(r.rating));
+    
+    let avgRating = totalCount > 0 ? (totalSum / totalCount).toFixed(1) : "0.0";
+    
+    document.getElementById('averageRatingDisplay').innerText = avgRating;
+    document.getElementById('totalReviewsCountDisplay').innerText = `Based on ${totalCount} reviews`;
+    
+    let starsHtml = '&#9733;'.repeat(Math.floor(avgRating)) + '&#9734;'.repeat(5 - Math.floor(avgRating));
+    document.getElementById('averageStarsDisplay').innerHTML = starsHtml;
+    
+    document.getElementById('modalReviews').innerHTML = `${starsHtml} <b>${avgRating} out of 5</b> (${totalCount} Verified Reviews)`;
+
+    const list = document.getElementById('reviewsList');
+    let html = '';
+    
+    if (localReviews.length === 0) {
+      html = `<p style="text-align:center; color:#999; font-size:13px; padding:10px 0;">No written comments left yet. Be the first to rate!</p>`;
+    } else {
+      html = localReviews.map(r => {
+        // If an image string exists, render it. Clicking it opens the lightbox full screen.
+        let uploadedImgHtml = r.image ? `<br><img src="${r.image}" class="review-img-preview" onclick="openLightbox('${r.image}')" title="Click to enlarge">` : '';
+        return `
+        <div style="background:#fdfdfd; border:1px solid #eee; padding:12px; border-radius:6px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:between; font-size:13px; color:#555; margin-bottom:4px; align-items:center;">
+            <strong style="flex:1; color:#222;">👤 ${r.name}</strong>
+            <span style="color:#f39c12; letter-spacing:1px;">${'&#9733;'.repeat(r.rating)}${ '&#9734;'.repeat(5 - r.rating) }</span>
+          </div>
+          <p style="margin:0; font-size:14px; color:#444; line-height:1.4;">${r.comment}</p>
+          ${uploadedImgHtml}
+        </div>
+      `}).join('');
+    }
+    
+    html += `
+      <div style="text-align:center; padding:12px; color:#aaa; font-size:11px; border-top:1px dashed #eee; margin-top:10px;">
+        🔒 Verified (${initialCount}) platform baseline customer standard indices are safely compiled.
+      </div>`;
+      
+    list.innerHTML = html;
+  }
+
+  function submitReview() {
+    const nameInput = document.getElementById('reviewName');
+    const ratingSelect = document.getElementById('reviewRating');
+    const commentInput = document.getElementById('reviewComment');
+    const imageInput = document.getElementById('reviewImage');
+    
+    const name = nameInput.value.trim() || "Verified Buyer";
+    const rating = parseInt(ratingSelect.value);
+    const comment = commentInput.value.trim();
+    
+    if (!comment) {
+      alert("Please write a comment text body to publish your review feedback.");
+      return;
+    }
+    
+    const file = imageInput.files[0];
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Callback once image file converts to Base64 data URI successfully
+        saveReviewData(name, rating, comment, e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      saveReviewData(name, rating, comment, null);
+    }
+  }
+
+  function saveReviewData(name, rating, comment, base64Image) {
+    let localReviews = JSON.parse(localStorage.getItem('reviews_' + currentP.title)) || [];
+    
+    localReviews.unshift({
+      name: name,
+      rating: rating,
+      comment: comment,
+      image: base64Image
+    });
+    
+    localStorage.setItem('reviews_' + currentP.title, JSON.stringify(localReviews));
+    
+    // Reset Form Input Layout Fields
+    document.getElementById('reviewName').value = '';
+    document.getElementById('reviewComment').value = '';
+    document.getElementById('reviewRating').value = '5';
+    document.getElementById('reviewImage').value = '';
+    
+    loadReviews(currentP);
+    renderGrid(products);
+    alert("Thank you! Your product review with image has been submitted successfully.");
+  }
+
+  /* Related Products Grid System Logic */
+  function renderRelatedProducts(currentProduct) {
+    const relatedGrid = document.getElementById('relatedProductGrid');
+    let related = products.filter(p => p.type === currentProduct.type && p.title !== currentProduct.title);
+    
+    if(related.length === 0) {
+      related = products.filter(p => p.title !== currentProduct.title);
+    }
+
+    relatedGrid.innerHTML = related.slice(0, 4).map(p => {
+      let localReviews = JSON.parse(localStorage.getItem('reviews_' + p.title)) || [];
+      let tCount = p.reviews.count + localReviews.length;
+      let tSum = (p.reviews.rating * p.reviews.count);
+      localReviews.forEach(r => tSum += parseFloat(r.rating));
+      let currentAvg = tCount > 0 ? (tSum / tCount).toFixed(1) : "0.0";
+
+      let starsHtml = '&#9733;'.repeat(Math.floor(currentAvg)) + '&#9734;'.repeat(5 - Math.floor(currentAvg));
+      return `
+      <div class="product-card" onclick='openModal(${JSON.stringify(p).replace(/"/g, "&quot;")})'>
+        <img src="${p.images[0]}" alt="${p.title}">
+        <div class="product-info">
+          <h3>${p.title}</h3>
+          <div class="stars">${starsHtml} (${tCount})</div>
+          <p class="price">${p.price} BDT</p>
+        </div>
+      </div>
+    `}).join('');
+  }
+
+  /* Lightbox Logic */
+  function openLightbox(src) {
+    if(!src) return;
+    document.getElementById('lightboxImg').src = src;
     document.getElementById('imageLightboxModal').style.display = 'flex';
   }
 
@@ -428,11 +761,11 @@
       itemsString = `${currentP.title} (${document.getElementById('sizeSelect').value})`;
     }
 
-    document.getElementById('productDetailView').style.display = 'none';
+    document.getElementById('mainModalContentWrapper').style.display = 'none'; 
     document.getElementById('orderFormSection').style.display = 'block';
     document.getElementById('finalProdName').value = itemsString;
-    document.getElementById('paymentMethod').value = 'Cash on Delivery'; // Default
-    document.getElementById('deliveryLocation').value = 'Narayanganj'; // Default
+    document.getElementById('paymentMethod').value = 'Cash on Delivery'; 
+    document.getElementById('deliveryLocation').value = 'Narayanganj'; 
     togglePaymentBox(); 
   }
 
@@ -467,9 +800,10 @@
   function closeModal(id) {
     document.getElementById(id).style.display = 'none';
     document.body.style.overflow = 'auto';
+    renderGrid(products); 
   }
 
-  // Initialize
+  // Initialize Landing View Grid
   renderGrid(products);
 </script>
 </body>
