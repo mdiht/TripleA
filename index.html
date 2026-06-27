@@ -3,150 +3,274 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Triple A - Shop</title>
+  <title>Triple A - Premium Shop</title>
   <style>
-    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; color: #333; }
+    :root {
+      --primary-color: #1e293b; /* Classic Dark Slate */
+      --accent-color: #f97316;  /* Daraz Orange Accent */
+      --accent-hover: #ea580c;
+      --bg-light: #f8fafc;
+      --text-main: #334155;
+      --border-color: #e2e8f0;
+    }
+
+    body { 
+      margin: 0; 
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+      background-color: var(--bg-light); 
+      color: var(--text-main); 
+    }
     
     /* Header & Theme */
-    .header-container { background-color: #0b0b0b; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; color: white; border-bottom: 2px solid #ff4757; position: sticky; top: 0; z-index: 100; }
-    .header-container h1 { margin: 0; color: #ff4757; text-transform: uppercase; letter-spacing: 2px; }
-    .cart-btn { background: #ff4757; color: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
-    .cart-btn:hover { background: #e84118; }
+    .header-container { 
+      background-color: #ffffff; 
+      padding: 15px 40px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-bottom: 1px solid var(--border-color); 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .header-container h1 { 
+      margin: 0; 
+      color: var(--primary-color); 
+      text-transform: uppercase; 
+      letter-spacing: 1.5px; 
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .cart-btn { 
+      background: #1e293b; 
+      color: white; 
+      border: none; 
+      padding: 10px 24px; 
+      border-radius: 6px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      font-size: 15px; 
+      transition: background 0.2s ease; 
+    }
+    .cart-btn:hover { background: #0f172a; }
 
     /* Search Bar */
-    .search-container { max-width: 600px; margin: 20px auto; padding: 0 20px; }
-    #searchBar { width: 100%; padding: 12px 20px; border-radius: 30px; border: 1px solid #ddd; font-size: 16px; outline: none; box-sizing: border-box; }
-    #searchBar:focus { border-color: #ff4757; }
+    .search-container { max-width: 600px; margin: 30px auto 20px auto; padding: 0 20px; }
+    #searchBar { 
+      width: 100%; 
+      padding: 12px 24px; 
+      border-radius: 8px; 
+      border: 1px solid #cbd5e1; 
+      font-size: 15px; 
+      outline: none; 
+      box-sizing: border-box; 
+      transition: all 0.2s ease;
+      background: #ffffff;
+    }
+    #searchBar:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1); }
 
     /* Category Filters */
-    .filter-container { text-align: center; margin-bottom: 20px; }
-    .filter-btn { background: white; color: #333; border: 1px solid #ddd; padding: 8px 20px; cursor: pointer; border-radius: 20px; margin: 5px; font-weight: bold; transition: 0.3s; }
-    .filter-btn:hover, .filter-btn.active { background: #ff4757; color: white; border-color: #ff4757; }
+    .filter-container { text-align: center; margin-bottom: 30px; }
+    .filter-btn { 
+      background: white; 
+      color: #64748b; 
+      border: 1px solid var(--border-color); 
+      padding: 8px 24px; 
+      cursor: pointer; 
+      border-radius: 6px; 
+      margin: 5px; 
+      font-weight: 600; 
+      font-size: 14px;
+      transition: all 0.2s ease; 
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 
     /* Product Grid */
-    .main-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-    .product-card { background: white; border-radius: 8px; overflow: hidden; cursor: pointer; transition: 0.2s; border: 1px solid #eee; }
-    .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); border-color: #ff4757; }
-    .product-card img { width: 100%; height: 250px; object-fit: cover; }
-    .product-info { padding: 15px; }
-    .product-info h3 { margin: 0 0 5px 0; font-size: 16px; color: #222; }
-    .product-info .price { margin: 0; font-size: 18px; color: #ff4757; font-weight: bold; }
-    .stars { color: #f39c12; font-size: 14px; margin-bottom: 5px; }
+    .main-wrapper { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+    .product-card { 
+      background: white; 
+      border-radius: 8px; 
+      overflow: hidden; 
+      cursor: pointer; 
+      transition: all 0.2s ease; 
+      border: 1px solid var(--border-color); 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); border-color: #cbd5e1; }
+    .product-card img { width: 100%; height: 280px; object-fit: cover; background-color: #f8fafc; }
+    .product-info { padding: 16px; text-align: left; }
+    .product-info h3 { margin: 0 0 8px 0; font-size: 15px; color: #1e293b; font-weight: 600; line-height: 1.4; height: 42px; overflow: hidden; }
+    
+    /* Discount Pricing CSS */
+    .price-current { margin: 0; font-size: 18px; color: var(--accent-color); font-weight: 700; }
+    .price-old-container { font-size: 13px; color: #94a3b8; display: flex; gap: 6px; align-items: center; margin-top: 4px; }
+    .price-old { text-decoration: line-through; }
+    .discount-badge { color: #1e293b; font-weight: bold; }
+    
+    .stars { color: #f59e0b; font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 3px; }
 
     /* Fullscreen Modal */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 1000; overflow-y: auto; }
-    .modal-header { padding: 15px 20px; background: #fff; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; }
-    .back-btn { background: transparent; color: #333; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-    .back-btn:hover { color: #ff4757; }
+    .modal-header { padding: 15px 40px; background: #fff; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; }
+    .back-btn { background: transparent; color: #475569; border: none; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .back-btn:hover { color: var(--accent-color); }
 
-    /* Daraz Style Product View */
-    .product-view-container { display: flex; flex-wrap: wrap; max-width: 1000px; margin: 20px auto; padding: 20px; gap: 40px; }
-    .image-gallery { flex: 1; min-width: 300px; }
-    .main-image { width: 100%; height: 400px; object-fit: contain; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; background: #fafafa; cursor: zoom-in; transition: 0.2s; }
-    .main-image:hover { border-color: #ff4757; }
-    .thumbnail-row { display: flex; gap: 10px; overflow-x: auto; }
-    .thumbnail-row img { width: 60px; height: 60px; object-fit: cover; border: 2px solid transparent; border-radius: 4px; cursor: pointer; transition: 0.2s; }
-    .thumbnail-row img:hover, .thumbnail-row img.active { border-color: #ff4757; }
+    /* Modern Product View Layout */
+    .product-view-container { display: flex; flex-wrap: wrap; max-width: 1100px; margin: 30px auto; padding: 0 20px; gap: 50px; }
+    .image-gallery { flex: 1; min-width: 320px; }
+    .main-image { width: 100%; height: 450px; object-fit: contain; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; background: #fafafa; cursor: zoom-in; }
+    .thumbnail-row { display: flex; gap: 12px; overflow-x: auto; }
+    .thumbnail-row img { width: 64px; height: 64px; object-fit: cover; border: 2px solid transparent; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    .thumbnail-row img:hover, .thumbnail-row img.active { border-color: var(--accent-color); }
 
-    .product-details { flex: 1; min-width: 300px; text-align: left; }
-    .product-details h2 { margin: 0 0 10px 0; font-size: 24px; }
-    .product-details .price { font-size: 28px; color: #ff4757; font-weight: bold; margin: 10px 0; }
-    .product-details .desc { color: #666; font-size: 15px; line-height: 1.5; margin-bottom: 20px; }
+    .product-details { flex: 1; min-width: 320px; text-align: left; }
+    .product-details h2 { margin: 0 0 12px 0; font-size: 26px; color: #0f172a; font-weight: 700; }
     
-    .action-btns { display: flex; gap: 10px; margin-top: 20px; }
-    .btn { padding: 12px 20px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; border-radius: 5px; transition: 0.3s; flex: 1; text-align: center; }
-    .btn-cart { background: #f0932b; color: white; }
-    .btn-cart:hover { background: #e58e26; }
-    .btn-buy { background: #ff4757; color: white; }
-    .btn-buy:hover { background: #e84118; }
+    /* Modal Price Wrapper */
+    .modal-price-wrapper { margin: 15px 0; }
+    .modal-price-current { font-size: 30px; color: var(--accent-color); font-weight: 700; margin: 0; }
+    .modal-price-old-container { font-size: 16px; color: #94a3b8; display: flex; gap: 10px; align-items: center; margin-top: 5px; }
 
-    /* Custom Private Chat System CSS */
-    .chat-section { max-width: 1000px; margin: 30px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #ddd; text-align: left; }
+    .product-details .desc { color: #475569; font-size: 15px; line-height: 1.6; margin-top: 20px; margin-bottom: 25px; }
+    
+    .action-btns { display: flex; gap: 15px; margin-top: 25px; }
+    .btn { padding: 14px 24px; font-size: 15px; font-weight: 600; border: none; cursor: pointer; border-radius: 6px; transition: 0.2s; flex: 1; text-align: center; }
+    .btn-cart { background: #f8fafc; color: #1e293b; border: 1px solid #cbd5e1; }
+    .btn-cart:hover { background: #f1f5f9; }
+    .btn-buy { background: var(--accent-color); color: white; }
+    .btn-buy:hover { background: var(--accent-hover); }
+
+    /* Professional Floating Chat System */
+    .floating-chat-container { position: fixed; bottom: 25px; right: 25px; z-index: 999; font-family: sans-serif; }
+    .chat-trigger-btn { background: var(--primary-color); color: white; border: none; padding: 12px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .chat-trigger-btn:hover { background: #0f172a; }
+    .homepage-chat-box-window { display: none; width: 340px; height: 420px; background: white; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.15); position: absolute; bottom: 55px; right: 0; overflow: hidden; flex-direction: column; }
+    .chat-window-header { background: var(--primary-color); color: white; padding: 12px 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+    .chat-window-header .close-widget { cursor: pointer; font-size: 18px; opacity: 0.8; }
+    .chat-window-header .close-widget:hover { opacity: 1; }
+
+    /* Chat Elements */
+    .chat-section { max-width: 1000px; margin: 30px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; }
     .chat-section h3 { margin-top: 0; color: #333; display: flex; justify-content: space-between; align-items: center; }
-    .chat-box { max-height: 250px; overflow-y: auto; border: 1px solid #eee; padding: 15px; border-radius: 5px; background: #fafafa; margin-bottom: 15px; }
-    .chat-message { margin-bottom: 10px; padding: 8px 12px; border-radius: 15px; max-width: 75%; font-size: 14px; line-height: 1.4; }
-    .msg-customer { background: #e1ffc7; align-self: flex-end; margin-left: auto; text-align: right; border-bottom-right-radius: 0; }
-    .msg-admin { background: #fff; border: 1px solid #ddd; align-self: flex-start; border-bottom-left-radius: 0; }
-    .chat-inputs { display: flex; gap: 10px; margin-bottom: 10px; }
-    .admin-toggle-btn { background: #333; color: white; border: none; padding: 5px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; }
+    .chat-box { height: 260px; overflow-y: auto; border: 1px solid #f1f5f9; padding: 15px; border-radius: 6px; background: #f8fafc; margin-bottom: 12px; }
+    .chat-message { margin-bottom: 10px; padding: 8px 12px; border-radius: 8px; max-width: 80%; font-size: 13.5px; line-height: 1.4; }
+    .msg-customer { background: #ffedd5; color: #9a3412; align-self: flex-end; margin-left: auto; border-bottom-right-radius: 0; }
+    .msg-admin { background: #ffffff; border: 1px solid var(--border-color); color: #334155; align-self: flex-start; border-bottom-left-radius: 0; }
+    .chat-inputs { display: flex; gap: 8px; }
+    .chat-inputs input { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; }
+    .admin-toggle-btn { background: #475569; color: white; border: none; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; transition: 0.2s ease;}
 
-    /* Review System CSS */
-    .reviews-section { max-width: 1000px; margin: 30px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #ddd; text-align: left; }
-    .reviews-section h3 { margin-top: 0; color: #333; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-    .review-img-preview { max-width: 100px; max-height: 100px; border-radius: 6px; margin-top: 8px; object-fit: cover; border: 1px solid #ddd; cursor: zoom-in; }
+    /* Review System */
+    .reviews-section { max-width: 1000px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; }
+    .reviews-section h3 { margin-top: 0; color: #1e293b; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; font-size: 18px; }
+    .review-img-preview { max-width: 100px; max-height: 100px; border-radius: 6px; margin-top: 8px; object-fit: cover; border: 1px solid var(--border-color); cursor: zoom-in; }
+    .review-video-preview { max-width: 200px; max-height: 150px; border-radius: 6px; margin-top: 8px; border: 1px solid var(--border-color); }
 
-    /* Related Products CSS */
-    .related-products-section { max-width: 1000px; margin: 40px auto; padding: 20px; border-top: 2px dashed #ddd; text-align: left; }
-    .related-products-section h3 { color: #222; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+    /* Related Products */
+    .related-products-section { max-width: 1000px; margin: 40px auto; padding: 20px 0; border-top: 1px solid var(--border-color); text-align: left; }
+    .related-products-section h3 { color: #1e293b; margin-bottom: 20px; font-size: 18px; }
 
-    /* Fullscreen Image Lightbox CSS */
-    .lightbox-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 2000; justify-content: center; align-items: center; cursor: zoom-out; }
-    .lightbox-img { max-width: 90%; max-height: 90%; border-radius: 5px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); animation: zoomIn 0.2s ease-in-out; }
-    .close-lightbox { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    .close-lightbox:hover { color: #ff4757; }
+    /* Lightbox */
+    .lightbox-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 2000; justify-content: center; align-items: center; cursor: zoom-out; }
+    .lightbox-img { max-width: 85%; max-height: 85%; border-radius: 6px; }
 
-    @keyframes zoomIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    /* Forms & Cart Modal */
-    #orderFormSection, #cartSection { display: none; max-width: 600px; margin: 20px auto; padding: 20px; background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
-    input, select, textarea { width: 100%; padding: 10px; background: #fff; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; box-sizing: border-box; outline: none; }
-    input:focus, select:focus, textarea:focus { border-color: #ff4757; }
+    /* Checkout & Forms */
+    #orderFormSection, #cartSection { display: none; max-width: 550px; margin: 20px auto; padding: 25px; background: #ffffff; border-radius: 8px; border: 1px solid var(--border-color); }
+    .form-group { margin-bottom: 16px; text-align: left; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: #475569; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 10px 14px; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; outline: none; color: #334155; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent-color); }
     
-    /* Pre-payment Box */
-    .payment-box { background: #e8f6f3; border: 1px solid #1abc9c; padding: 15px; border-radius: 5px; margin-top: 10px; display: none; }
-    .payment-box p { margin: 0 0 10px 0; font-size: 14px; color: #16a085; font-weight: bold; }
+    .payment-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 6px; margin-top: 10px; display: none; }
+    .payment-box p { margin: 0 0 8px 0; font-size: 14px; color: #166534; font-weight: 600; }
 
-    /* Cart Items */
-    .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; }
-    .cart-item p { margin: 0; }
-    .remove-btn { color: red; cursor: pointer; font-size: 14px; font-weight: bold; }
+    .cart-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; align-items: center; }
+    .cart-item p { margin: 0; font-size: 14.5px; }
+    .remove-btn { color: #ef4444; cursor: pointer; font-size: 13px; font-weight: 600; }
+
+    /* Professional Footer Layout */
+    .site-footer { background-color: #ffffff; border-top: 1px solid var(--border-color); padding: 40px 0 20px 0; margin-top: 60px; font-size: 14px; color: #555; }
+    .footer-top { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+    .footer-col h4 { color: var(--primary-color); font-size: 16px; margin-top: 0; margin-bottom: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .footer-col p { line-height: 1.6; color: #64748b; margin: 0 0 10px 0; }
+    .footer-col ul { list-style: none; padding: 0; margin: 0; }
+    .footer-col ul li { margin-bottom: 12px; }
+    .footer-col ul li a { color: #64748b; text-decoration: none; transition: color 0.2s ease; font-weight: 500; }
+    .footer-col ul li a:hover { color: var(--accent-color); }
+    .footer-bottom { max-width: 1200px; margin: 40px auto 0 auto; padding: 20px 20px 0 20px; border-top: 1px solid var(--border-color); text-align: center; color: #94a3b8; font-size: 13px; }
   </style>
 </head>
 <body>
 
+<!-- Navigation Header -->
 <div class="header-container">
   <h1>Triple A</h1>
   <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
 </div>
 
+<!-- Homepage Search Section -->
 <div class="search-container">
-  <input type="text" id="searchBar" placeholder="Search products..." onkeyup="filterProducts()">
+  <input type="text" id="searchBar" placeholder="Find your favourite character..." onkeyup="filterProducts()">
 </div>
 
+<!-- Category Filters Section -->
 <div class="filter-container">
   <button class="filter-btn active" onclick="setCategory('all', this)">All</button>
   <button class="filter-btn" onclick="setCategory('T-Shirt', this)">T-Shirts</button>
   <button class="filter-btn" onclick="setCategory('Wall Mate', this)">Wallmates</button>
 </div>
 
+<!-- Main Product Wrapper -->
 <div class="main-wrapper">
   <div id="productGrid" class="product-grid"></div>
 </div>
 
-<!-- Product View Modal -->
+<!-- Global Homepage Floating Inbox Chat Window -->
+<div class="floating-chat-container">
+  <button class="chat-trigger-btn" onclick="toggleHomepageChat()">💬 Messages</button>
+  <div class="homepage-chat-box-window" id="globalChatWindow">
+    <div class="chat-window-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span>Support Chat</span>
+        <button class="admin-toggle-btn" id="homeAdminBtn" style="background: transparent; border: 1px solid #cbd5e1;" onclick="toggleHomepageAdmin()">Admin</button>
+      </div>
+      <span class="close-widget" onclick="toggleHomepageChat()">&times;</span>
+    </div>
+    <div style="padding: 10px; flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #fff;">
+      <div class="chat-box" id="homepageChatBox" style="height: 290px;"></div>
+      <div class="chat-inputs">
+        <input type="text" id="homepageChatInput" placeholder="Type your message here...">
+        <button class="btn btn-buy" style="padding: 10px; flex: initial; font-size: 12px; border-radius: 6px;" onclick="sendHomepageChatMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product View Detailed Fullscreen Modal -->
 <div id="productModal" class="modal-overlay">
   <div class="modal-header">
-    <button class="back-btn" onclick="closeModal('productModal')"><span>&#8592;</span> Back</button>
+    <button class="back-btn" onclick="closeModal('productModal')"><span>&#8592;</span> Back to Home</button>
   </div>
   
   <div id="mainModalContentWrapper">
     <div class="product-view-container" id="productDetailView">
       <div class="image-gallery">
-        <img id="mainSliderImg" class="main-image" src="" onclick="openLightbox(this.src)" title="Click to view full screen">
+        <img id="mainSliderImg" class="main-image" src="" onclick="openLightbox(this.src)" title="Click to expand view">
         <div class="thumbnail-row" id="thumbnailRow"></div>
       </div>
       
       <div class="product-details">
         <h2 id="modalTitle">Product Title</h2>
         <div class="stars" id="modalReviews">&#9734;&#9734;&#9734;&#9734;&#9734; (0 Reviews)</div>
-        <p class="price" id="modalPrice">0 BDT</p>
-        <p class="desc" id="modalDesc">Product description goes here.</p>
+        
+        <!-- Dynamic Discount Price Wrapper -->
+        <div class="modal-price-wrapper" id="modalPriceContainer">
+            <!-- Injected via JS -->
+        </div>
+
+        <p class="desc" id="modalDesc">Detailed specification profile blueprint text.</p>
 
         <div class="form-group" id="sizeGroup">
           <label id="sizeLabel">Select Size</label>
@@ -155,7 +279,7 @@
 
         <div class="action-btns">
           <button class="btn btn-cart" onclick="addToCart()">Add to Cart</button>
-          <button class="btn btn-buy" onclick="showOrderForm(false)">Buy Now</button>
+          <button class="btn btn-buy" onclick="showOrderForm(false)">Buy It Now</button>
         </div>
       </div>
     </div>
@@ -163,207 +287,305 @@
     <!-- Product Specific Private Chat Section -->
     <div class="chat-section" id="productChatSection">
       <h3>
-        <span>💬 Private Inbox Chat</span>
-        <button class="admin-toggle-btn" id="adminBtn" onclick="toggleAdminMode()">Admin Login</button>
+        <span>💬 Product Specific Inquiry Chat</span>
+        <button class="admin-toggle-btn" id="adminBtn" onclick="toggleAdminMode()">Admin Access Link</button>
       </h3>
       
-      <!-- Admin Chat Selector -->
-      <div id="adminUserSelectContainer" style="display: none; margin-bottom: 12px; background: #f1f1f1; padding: 8px; border-radius: 4px;">
-        <label style="font-size: 13px; font-weight: bold; color: #555;">Select Customer Thread: </label>
+      <div id="adminUserSelectContainer" style="display: none; margin-bottom: 12px; background: #f1f5f9; padding: 10px; border-radius: 6px;">
+        <label style="font-size: 13px; font-weight: bold; color: #475569;">Select Active Client Pipeline: </label>
         <select id="chatUserSelect" onchange="loadChatMessages(currentP.title)" style="padding: 5px; width: auto; display: inline-block; font-size: 13px; margin-left: 5px;"></select>
       </div>
 
       <div class="chat-box" id="chatBox"></div>
       <div class="chat-inputs">
-        <input type="text" id="chatInput" placeholder="Ask something about this product...">
+        <input type="text" id="chatInput" placeholder="Ask details about this product...">
         <button class="btn btn-buy" style="flex: 0 0 100px; padding: 10px;" onclick="sendChatMessage()">Send</button>
       </div>
     </div>
 
-    <!-- Dynamic Review & Rating Section with Image Upload -->
+    <!-- Dynamic Review Box with Video Support -->
     <div class="reviews-section" id="productReviewsSection">
-      <h3>📊 Customer Reviews & Ratings</h3>
+      <h3>📊 Customer Review Index Panel</h3>
       <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 25px;">
-        <!-- Rating Metrics Summary Box -->
-        <div style="background: #fafafa; border: 1px solid #eee; padding: 20px; border-radius: 8px; text-align: center; min-width: 160px; box-sizing: border-box;">
-          <h1 id="averageRatingDisplay" style="margin: 0; font-size: 46px; color: #ff4757;">0.0</h1>
-          <p style="margin: 4px 0 0 0; color: #666; font-size: 14px;">out of 5</p>
-          <div class="stars" id="averageStarsDisplay" style="font-size: 18px; margin-top: 6px;"></div>
-          <small id="totalReviewsCountDisplay" style="color: #888; display: block; margin-top: 5px;"></small>
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; text-align: center; min-width: 160px; box-sizing: border-box;">
+          <h1 id="averageRatingDisplay" style="margin: 0; font-size: 46px; color: var(--accent-color);">0.0</h1>
+          <p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">out of 5</p>
+          <div class="stars" id="averageStarsDisplay" style="font-size: 18px; margin-top: 6px; justify-content: center;"></div>
+          <small id="totalReviewsCountDisplay" style="color: #94a3b8; display: block; margin-top: 5px;"></small>
         </div>
         
-        <!-- Write Review Form Container -->
         <div style="flex: 1; min-width: 260px;">
-          <h4 style="margin: 0 0 12px 0; color: #333;">Write a Review</h4>
+          <h4 style="margin: 0 0 12px 0; color: #1e293b;">Write Feedback</h4>
           <div class="form-group" style="margin-bottom: 10px;">
-            <input type="text" id="reviewName" placeholder="Your Name (Optional)" style="padding: 8px; font-size: 14px;">
+            <input type="text" id="reviewName" placeholder="Your Client Alias (Optional)">
           </div>
           <div class="form-group" style="margin-bottom: 10px;">
-            <select id="reviewRating" style="padding: 8px; font-size: 14px;">
-              <option value="5">⭐⭐⭐⭐⭐ (5 Star Rating)</option>
-              <option value="4">⭐⭐⭐⭐ (4 Star Rating)</option>
-              <option value="3">⭐⭐⭐ (3 Star Rating)</option>
-              <option value="2">⭐⭐ (2 Star Rating)</option>
-              <option value="1">⭐ (1 Star Rating)</option>
+            <select id="reviewRating">
+              <option value="5">⭐⭐⭐⭐⭐ (5 Stars Excellent)</option>
+              <option value="4">⭐⭐⭐⭐ (4 Stars Premium)</option>
+              <option value="3">⭐⭐⭐ (3 Stars Standard)</option>
+              <option value="2">⭐⭐ (2 Stars Fair)</option>
+              <option value="1">⭐ (1 Star Critical)</option>
             </select>
           </div>
           <div class="form-group" style="margin-bottom: 10px;">
-            <label style="font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;">Attach Image (Optional)</label>
-            <input type="file" id="reviewImage" accept="image/*" style="padding: 5px; font-size: 13px;">
+            <label style="font-size: 13px; font-weight: bold; color: #475569; display: block; margin-bottom: 4px;">Upload Media (Image or Video) - Max 2MB</label>
+            <input type="file" id="reviewMedia" accept="image/*, video/*" style="padding: 5px; font-size: 13px;">
           </div>
           <div class="form-group" style="margin-bottom: 10px;">
-            <textarea id="reviewComment" placeholder="Write your valuable experience here..." rows="2" style="padding: 8px; font-size: 14px;"></textarea>
+            <textarea id="reviewComment" placeholder="Elaborate details regarding your experience..." rows="2"></textarea>
           </div>
-          <button class="btn btn-buy" style="padding: 8px 16px; font-size: 14px; width: auto; border-radius: 4px;" onclick="submitReview()">Submit Review</button>
+          <button class="btn btn-buy" style="padding: 10px 20px; font-size: 14px; width: auto; border-radius: 6px;" onclick="submitReview()">Publish Review</button>
         </div>
       </div>
-      
-      <!-- List of comments -->
-      <div id="reviewsList" style="max-height: 350px; overflow-y: auto; border-top: 1px solid #eee; padding-top: 15px;"></div>
+      <div id="reviewsList" style="max-height: 350px; overflow-y: auto; border-top: 1px solid var(--border-color); padding-top: 15px;"></div>
     </div>
 
-    <!-- Related Products Section -->
+    <!-- Related Matrix -->
     <div class="related-products-section">
       <h3>You May Also Like</h3>
       <div id="relatedProductGrid" class="product-grid"></div>
     </div>
   </div>
 
-  <!-- Order Form -->
+  <!-- Checkout Confirmation Layout -->
   <div id="orderFormSection">
-    <h3 style="text-align: center; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Checkout Details</h3>
+    <h3 style="text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-top: 0;">Checkout Information Details</h3>
     <form action="https://formspree.io/f/mnjkaokz" method="POST" id="checkoutForm">
       <input type="hidden" name="Order_Items" id="finalProdName">
       <input type="hidden" name="Total_Price" id="finalPriceInput">
       
-      <div class="form-group"><label>Your Name</label><input type="text" name="Name" required></div>
-      <div class="form-group"><label>Phone Number</label><input type="text" name="Phone" required></div>
-      <div class="form-group"><label>Delivery Address</label><textarea name="Address" rows="3" required></textarea></div>
+      <div class="form-group"><label>Customer Name</label><input type="text" name="Name" required></div>
+      <div class="form-group"><label>Active Phone Number</label><input type="text" name="Phone" required></div>
+      <div class="form-group"><label>Comprehensive Destination Address</label><textarea name="Address" rows="3" required></textarea></div>
       
-      <div class="form-group">
-        <label>Delivery Area</label>
-        <select id="deliveryLocation" name="Delivery_Location" onchange="togglePaymentBox()">
-          <option value="Narayanganj">Narayanganj (60 BDT)</option>
-          <option value="Dhaka">Dhaka (115 BDT)</option>
-          <option value="Other Districts">Other Districts / Rest of Bangladesh (135 BDT)</option>
+      <!-- Dynamic Code Driven Color Selection Box -->
+      <div class="form-group" id="formColorGroup">
+        <label>Selected Color Scheme Option</label>
+        <select id="formColorSelect" name="Product_Color" required></select>
+      </div>
+
+      <!-- Shoulder Style Dropdown with 70 TK extra trigger -->
+      <div class="form-group" id="formShoulderGroup">
+        <label>Shoulder Style Preference</label>
+        <select id="formShoulderSelect" name="Shoulder_Style" onchange="togglePaymentBox()" required>
+          <option value="Regular Fit">Regular Fit Shoulder</option>
+          <option value="Drop Shoulder">Drop Shoulder Style (+৳70)</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Payment Method</label>
+        <label>Logistic Delivery Hub Region</label>
+        <select id="deliveryLocation" name="Delivery_Location" onchange="togglePaymentBox()">
+          <option value="Narayanganj">Narayanganj (৳60)</option>
+          <option value="Dhaka">Dhaka (৳115)</option>
+          <option value="Other Districts">Other Districts / National Outskirts (৳135)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Financial Escrow Settlement Protocol</label>
         <select id="paymentMethod" name="Payment_Method" onchange="togglePaymentBox()">
-          <option value="Cash on Delivery">Cash on Delivery (+20 BDT)</option>
-          <option value="Pre-payment">Pre-payment (bKash/Nagad)</option>
+          <option value="Cash on Delivery">Cash on Delivery (+৳20)</option>
+          <option value="Pre-payment">Pre-payment (bKash/Nagad Wire Transfer)</option>
         </select>
       </div>
       
       <div class="payment-box" id="bkashNagadSection">
-        <p>Send Total Amount to: <strong>017XXXXXXXX (bKash/Nagad Personal)</strong></p>
+        <p>Remit Checkout Funding Total to: <strong>017XXXXXXXX (bKash/Nagad Personal MFS)</strong></p>
         <select name="Paid_Via" style="margin-bottom: 10px;">
           <option value="bKash">bKash</option>
           <option value="Nagad">Nagad</option>
         </select>
-        <input type="text" name="TrxID" placeholder="Enter Transaction ID (TrxID)">
+        <input type="text" name="TrxID" placeholder="Insert Electronic Verification Hash (TrxID)">
       </div>
       
-      <h3 style="text-align: right; color: #ff4757;" id="checkoutTotalDisplay">Total: 0 BDT</h3>
-      <button type="submit" class="btn btn-buy" style="width:100%;">Confirm Order</button>
+      <h3 style="text-align: right; color: var(--accent-color); margin: 20px 0;" id="checkoutTotalDisplay">Total: ৳0</h3>
+      <button type="submit" class="btn btn-buy" style="width:100%; border-radius: 6px; padding: 14px;">Finalize Shipment Order</button>
     </form>
   </div>
 </div>
 
-<!-- Cart Modal -->
+<!-- Cart Sidebar Overlay Container Layout -->
 <div id="cartModal" class="modal-overlay">
   <div class="modal-header">
     <button class="back-btn" onclick="closeModal('cartModal')"><span>&#8592;</span> Continue Shopping</button>
-    <h2 style="margin:0; font-size:20px;">Your Cart</h2>
+    <h2 style="margin:0; font-size:18px; font-weight: 700;">Shopping Cart Summary</h2>
   </div>
   <div id="cartSection">
     <div id="cartItemsList"></div>
-    <h3 style="text-align: right; color: #ff4757; margin-top: 20px;" id="cartTotalDisplay">Total: 0 BDT</h3>
-    <button class="btn btn-buy" style="width:100%; margin-top:10px;" onclick="checkoutFromCart()">Proceed to Checkout</button>
+    <h3 style="text-align: right; color: var(--accent-color); margin-top: 25px;" id="cartTotalDisplay">Total: ৳0</h3>
+    <button class="btn btn-buy" style="width:100%; margin-top:15px;" onclick="checkoutFromCart()">Proceed to Checkout Framework</button>
   </div>
 </div>
 
-<!-- Image Lightbox Modal -->
+<!-- Fullscreen Image Lightbox View Panel -->
 <div id="imageLightboxModal" class="lightbox-overlay" onclick="closeLightbox()">
-  <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
   <img id="lightboxImg" class="lightbox-img" src="">
 </div>
 
+<!-- Classic Clean E-Commerce Corporate Footer Structure -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-col">
+      <h4>About Triple A</h4>
+      <p>Providing premium-tier custom clothing variants, tactical design aesthetics, high-grade knit products, and vivid high-resolution anime themed wall decorations targeting professional quality parameters.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Physical Logistics Center</h4>
+      <p><strong>Hub Location Address:</strong></p>
+      <p>Painadi, Sultaner Moor,<br>Siddirganj, Narayanganj,<br>Bangladesh</p>
+    </div>
+    <div class="footer-col">
+      <h4>Corporate Social Channels</h4>
+      <ul>
+        <li><a href="https://www.facebook.com/profile.php?id=61590023471407" target="_blank">Facebook Official Page</a></li>
+        <li><a href="https://t.me/TripleA_aaa" target="_blank">Telegram Distribution Channel</a></li>
+        <li><a href="https://whatsapp.com/channel/0029VbD6eta1noyzdWuKkp2o" target="_blank">WhatsApp Interactive Group</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Triple A Enterprises Corp. All absolute operational indices safely registered. Optimized Minimalist Design Framework.</p>
+  </div>
+</footer>
+
 <script>
-  // Product Database updated with all default ratings set to 0[cite: 1]
   const products = [
     { 
-      title: "Levi Ackerman Premium T-Shirt", type: "T-Shirt", price: 500, 
+      title: "Levi Ackerman Premium T-Shirt", type: "T-Shirt", 
+      price: 500, originalPrice: 650, 
       images: ["https://i.ibb.co.com/MyM31b5V/657271574-122177027318743567-3520612459997123059-n.jpg"],
       description: "High-quality comfortable cotton T-shirt featuring Levi Ackerman from Attack on Titan. DTF print ensures long-lasting colors.",
-      reviews: { rating: 0, count: 0 }
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
     },
     { 
-      title: "Eren & Mikasa T-shirt", type: "T-Shirt", price: 550, 
-      images: ["https://i.ibb.co.com/rRG3X7LN/5.png", "https://i.ibb.co.com/mCKhvVs7/6.png"],
+      title: "Itachi Uchia T-shirt", type: "T-Shirt", 
+      price: 590, originalPrice: 700, 
+      images: ["https://i.ibb.co/4nqsnzdg/16.png", "https://i.ibb.co/SDfwvCPJ/15.png"],
+      description: "Premium Uchiha Itachi from Naruto animr design T-shirt. Elite quality thick lining array build optimized for premium operations.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black Solid", "White"]
+    },
+    { 
+      title: "Eren & Mikasa T-shirt", type: "T-Shirt", 
+      price: 575, originalPrice: 650, 
+      images: ["https://i.ibb.co/4Rfz07KQ/4.png", "https://i.ibb.co/Wv6kBLFQ/3.png"], 
       description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
     },
     { 
-      title: "Mikasa Ackerman soft T-shirt", type: "T-Shirt", price: 550, 
+      title: "Sakamoto Premium T-Shirt", type: "T-Shirt", 
+      price: 580, originalPrice: 650, 
+      images: ["https://i.ibb.co/LzRmKXWk/Chat-GPT-Image-Jun-28-2026-12-39-39-AM.png", "https://i.ibb.co/zHL9kdwJ/sakamoto-b.png", "https://i.ibb.co/67VgTzyL/sakamoto-f.png", "https://i.ibb.co/27WB6M7h/sakamoto.png", "https://i.ibb.co/CsD4QLz1/sakamoto-white-b.png", "https://i.ibb.co/d0pH62rY/sakamoto-white-f.png"],
+      description: "High-quality comfortable cotton T-shirt featuring Eren Yeager from Attack on Titan. DTF print ensures long-lasting colors.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
+    { 
+      title: "Eren Yeager Premium T-Shirt", type: "T-Shirt", 
+      price: 500, originalPrice: 650, 
+      images: ["https://i.ibb.co.com/pvfXSNNy/656146601-122177027750743567-1604655941251105135-n.jpg", "link"],
+      description: "High-quality comfortable cotton T-shirt featuring Eren Yeager from Attack on Titan. DTF print ensures long-lasting colors.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
+    { 
+      title: "Eren & Mikasa T-shirt", type: "T-Shirt", 
+      price: 550, originalPrice: 650, 
+      images: ["https://i.ibb.co/8ZGR989/7.png", "https://i.ibb.co/gMS9bMgY/8.png"], 
+      description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
+    { 
+      title: "Itachi Uchia T-shirt", type: "T-Shirt", 
+      price: 590, originalPrice: 700, 
+      images: ["https://i.ibb.co.com/tTpP1RkG/11.png", "https://i.ibb.co.com/GQ9tdJM1/12.png"],
+      description: "Premium Uchiha Itachi from Naruto animr design T-shirt. Elite quality thick lining array build optimized for premium operations.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black Solid", "White"]
+    },
+    { 
+      title: "Eren & Mikasa T-shirt", type: "T-Shirt", 
+      price: 550, originalPrice: 650, 
+      images: ["https://i.ibb.co/mCKhvVs7/6.png", "https://i.ibb.co/rRG3X7LN/5.png"], 
+      description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
+    { 
+      title: "Itachi Uchia T-shirt", type: "T-Shirt", 
+      price: 600, originalPrice: 750, 
+      images: ["https://i.ibb.co.com/RGDfPbL0/14.png", "https://i.ibb.co.com/XngY9qq/13.png"],
+      description: "Premium Uchiha Itachi from Naruto animr design T-shirt. Soft fabric, perfect for daily wear.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
+    { 
+      title: "Mikasa Ackerman soft T-shirt", type: "T-Shirt", 
+      price: 570, originalPrice: 750, 
       images: ["https://i.ibb.co.com/fcqDgNc/655785019-122177027762743567-1928302109426635733-n.jpg"],
       description: "Premium Mikasa Ackerman from Attack on Titan design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
     },
     { 
-      title: "Eren & Mikasa T-shirt 2", type: "T-Shirt", price: 550, 
-      images: ["https://i.ibb.co.com/tT60pWbh/9.png", "https://i.ibb.co.com/4RtkQSKf/10.png"],
+      title: "Kakashi Hatake premium T-shirt", type: "T-Shirt", 
+      price: 550, originalPrice: 650, 
+      images: ["https://i.ibb.co.com/tTfQZfnz/20.png", "https://i.ibb.co.com/gZWNHVVN/19.png"],
       description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }    },
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
     { 
-      title: "Madara Uchiha T-shirt", type: "T-Shirt", price: 570, 
-      images: ["https://i.ibb.co.com/JW2FMDCn/655660752-122177027384743567-5207846785072003610-n.jpg"],
+      title: "Itachi Uchia T-shirt", type: "T-Shirt", 
+      price: 600, originalPrice: 750, 
+      images: ["https://i.ibb.co/7dqNyXVm/Chat-GPT-Image-Jun-27-2026-10-10-29-PM.png", "https://i.ibb.co/KxqZDZw0/Gemini-Generated-Image-h1ii1hh1ii1hh1ii.png"],
+      description: "Premium Uchiha Itachi from Naruto animr design T-shirt. Soft fabric, perfect for daily wear.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
+    { 
+      title: "Eren & Mikasa T-shirt", type: "T-Shirt", 
+      price: 500, originalPrice: 650, 
+      images: ["https://i.ibb.co/Ldk79TJ1/657387702-122177027186743567-410346096309257837-n.jpg"], 
+      description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["Black", "White"]
+    },
+    { 
+      title: "Madara Uchiha T-shirt", type: "T-Shirt", 
+      price: 500, originalPrice: 700, 
+      images: ["https://i.ibb.co.com/JW2FMDCn/655660752-122177027384743567-5207846785072003610-n.jpg", "https://i.ibb.co/Dgs3gLxZ/madara-white.png"],
       description: "Premium Madara Uchiha from Naruto design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
+      reviews: { rating: 0, count: 0 },
+      colors: ["White", "Deep Black"]
     },
     { 
-      title: "Itachi Uchiha T-shirt", type: "T-Shirt", price: 550, 
-      images: ["https://i.ibb.co.com/G4qjF2fx/2.png", "https://i.ibb.co.com/JwZQbng0/1.png"],
-      description: "Premium Uchiha Itachi from Naruto design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
+      title: "Itachi Uchiha T-shirt", type: "T-Shirt", 
+      price: 599, originalPrice: 760, 
+      images: ["https://i.ibb.co.com/BVpwdfnK/18.png", "https://i.ibb.co.com/Txx0BsBq/17.png"],
+      description: "Premium Madara Uchiha from Naruto design T-shirt. Soft fabric, perfect for daily wear.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["White", "Deep Black"]
     },
     { 
-      title: "Eren Yeager & Mikasa Ackerman T-shirt", type: "T-Shirt", price: 550, 
-      images: ["https://i.ibb.co.com/Wv6kBLFQ/3.png", "https://i.ibb.co.com/4Rfz07KQ/4.png"],
-      description: "Premium Eren & Mikasa from AOT couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
+      title: "Eren & Mikasa couple T-shirt", type: "T-Shirt", 
+      price: 599, originalPrice: 760, 
+      images: ["https://i.ibb.co.com/tT60pWbh/9.png", "https://i.ibb.co.com/4RtkQSKf/10.png"],
+      description: "Premium Eren Yeager & Mikasa Ackerman couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
+      reviews: { rating: 0, count: 0 },
+      colors: ["White", "Deep Black"]
     },
     { 
-      title: "Itachi Uchiha T-shirt Premium", type: "T-Shirt", price: 550, 
-      images: ["https://i.ibb.co.com/GQ9tdJM1/12.png", "https://i.ibb.co.com/tTpP1RkG/11.png"],
-      description: "Premium Itachi Uchiha from Naruto design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
-    },
-    { 
-      title: "kakashi Hatake T-shirt", type: "T-Shirt", price: 550, 
-      images: ["https://i.ibb.co.com/gZWNHVVN/19.png", "https://i.ibb.co.com/tTfQZfnz/20.png"],
-      description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
-    },
-    { 
-      title: "Uchiha Itachi T-shirt V2", type: "T-Shirt", price: 550, 
-      images: ["https://i.ibb.co.com/Txx0BsBq/17.png", "https://i.ibb.co.com/BVpwdfnK/18.png"],
-      description: "Premium couple/duo design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
-    },
-    { 
-      title: "Eren Yeager T-shirt", type: "T-Shirt", price: 500, 
-      images: ["https://i.ibb.co.com/pvfXSNNy/656146601-122177027750743567-1604655941251105135-n.jpg"],
-      description: "Premium Eren Yeager from Attack on Titen (AOT) design T-shirt. Soft fabric, perfect for daily wear.",
-      reviews: { rating: 0, count: 0 }
-    },
-    { 
-      title: "Roronoa Zoro 10 piece Combo Wallmate", type: "Wall Mate", price: 399, 
-      images: ["https://i.ibb.co.com/N2RX7s2c/42610354760.png", "https://i.ibb.co.com/N2RX7s2c/42610354760.png"],
+      title: "Roronoa Zoro 10 piece Combo Wallmate", type: "Wall Mate", 
+      price: 399, originalPrice: 599, 
+      images: ["https://i.ibb.co.com/N2RX7s2c/42610354760.png"],
       description: "Decorate your room with the ultimate Zoro wallmate combo. Comes with double-sided tape for easy setup.",
-      reviews: { rating: 0, count: 0 }
+      reviews: { rating: 0, count: 0 },
     }
   ];
 
@@ -372,11 +594,21 @@
   let cart = [];
   let isAdminMode = false;
 
-  // Generate Unique ID per Browser Session for 1-on-1 Personal Chatting
   let myUserId = localStorage.getItem('shop_userId');
   if (!myUserId) {
     myUserId = 'Client_' + Math.random().toString(36).substr(2, 9).toUpperCase();
     localStorage.setItem('shop_userId', myUserId);
+  }
+
+  function generateDiscountHTML(price, originalPrice) {
+    if (originalPrice && originalPrice > price) {
+      let discountPct = Math.round(((originalPrice - price) / originalPrice) * 100);
+      return `<div class="price-old-container">
+                <span class="price-old">৳${originalPrice}</span>
+                <span class="discount-badge">-${discountPct}%</span>
+              </div>`;
+    }
+    return '';
   }
 
   function renderGrid(data) {
@@ -387,15 +619,18 @@
       let tSum = (p.reviews.rating * p.reviews.count);
       localReviews.forEach(r => tSum += parseFloat(r.rating));
       let currentAvg = tCount > 0 ? (tSum / tCount).toFixed(1) : "0.0";
+      let starsHtml = '★'.repeat(Math.floor(currentAvg)) + '☆'.repeat(5 - Math.floor(currentAvg));
+      
+      let priceHtml = `<p class="price-current">৳${p.price}</p>`;
+      priceHtml += generateDiscountHTML(p.price, p.originalPrice);
 
-      let starsHtml = '&#9733;'.repeat(Math.floor(currentAvg)) + '&#9734;'.repeat(5 - Math.floor(currentAvg));
       return `
       <div class="product-card" onclick='openModal(${JSON.stringify(p).replace(/"/g, "&quot;")})'>
         <img src="${p.images[0]}" alt="${p.title}">
         <div class="product-info">
           <h3>${p.title}</h3>
-          <div class="stars">${starsHtml} (${tCount})</div>
-          <p class="price">${p.price} BDT</p>
+          ${priceHtml}
+          <div class="stars" style="margin-top: 8px;">${starsHtml} <span style="color:#64748b; font-size:12px; margin-left:4px;">(${tCount})</span></div>
         </div>
       </div>
     `}).join('');
@@ -419,27 +654,23 @@
     document.getElementById('orderFormSection').style.display = 'none';
     document.getElementById('mainModalContentWrapper').style.display = 'block';
     document.getElementById('productDetailView').style.display = 'flex';
-    
     document.getElementById('productModal').scrollTop = 0;
     document.body.style.overflow = 'hidden';
 
-    // Set Data
     document.getElementById('mainSliderImg').src = p.images[0];
     document.getElementById('modalTitle').innerText = p.title;
     document.getElementById('modalDesc').innerText = p.description;
 
-    // Thumbnails
     const thumbs = document.getElementById('thumbnailRow');
     thumbs.innerHTML = p.images.map((img, i) => 
       `<img src="${img}" class="${i===0?'active':''}" onclick="changeMainImage('${img}', this)">`
     ).join('');
 
-    // Size Selection
     const sizeSelect = document.getElementById('sizeSelect');
     if(p.type === 'Wall Mate') {
-        sizeSelect.innerHTML = '<option value="4x6">4x6 Inch (399 BDT)</option><option value="8x8">8x8 Inch (699 BDT)</option>';
+        sizeSelect.innerHTML = '<option value="4x6">4x6 Inch (৳399)</option><option value="8x8">8x8 Inch (৳699)</option>';
     } else {
-        sizeSelect.innerHTML = '<option value="M">M</option><option value="L">L</option><option value="XL">XL</option>';
+        sizeSelect.innerHTML = '<option value="M">M (Standard Size)</option><option value="L">L (Premium Spec)</option><option value="XL">XL (Extended Fit)</option>';
     }
     
     updateViewPrice();
@@ -456,27 +687,103 @@
 
   function updateViewPrice() {
     let price = currentP.price;
-    if (currentP.type === 'Wall Mate' && document.getElementById('sizeSelect').value === '8x8') price = 699;
-    document.getElementById('modalPrice').innerText = price + " BDT";
+    let originalPrice = currentP.originalPrice;
+    
+    if (currentP.type === 'Wall Mate' && document.getElementById('sizeSelect').value === '8x8') {
+        price = 699;
+        originalPrice = 899;
+    }
+    
+    let priceContainer = document.getElementById('modalPriceContainer');
+    let html = `<p class="modal-price-current">৳${price}</p>`;
+    
+    if (originalPrice && originalPrice > price) {
+        let discountPct = Math.round(((originalPrice - price) / originalPrice) * 100);
+        html += `<div class="modal-price-old-container">
+                    <span class="price-old">৳${originalPrice}</span>
+                    <span class="discount-badge">-${discountPct}%</span>
+                 </div>`;
+    }
+    priceContainer.innerHTML = html;
     return price;
   }
 
-  /* 1-on-1 Inbox Chat Feature Logic */
-  function toggleAdminMode() {
+  // --- UPDATED HOMEPAGE CHAT ADMIN FUNCTIONS ---
+  function toggleHomepageChat() {
+    const win = document.getElementById('globalChatWindow');
+    if(win.style.display === 'flex') {
+      win.style.display = 'none';
+    } else {
+      win.style.display = 'flex';
+      loadHomepageChatUI();
+    }
+  }
+
+  function toggleHomepageAdmin() {
     if (!isAdminMode) {
-      let pass = prompt("Enter Admin Password:");
-      if (pass === "admin123") {
+      let pass = prompt("Admin Account Security Key Required:");
+      if (pass === "08042010") {
         isAdminMode = true;
-        document.getElementById('adminBtn').innerText = "Admin Mode: ON";
-        document.getElementById('chatInput').placeholder = "Type private reply as Admin...";
-        alert("Admin Interface Activated!");
+        document.getElementById('homeAdminBtn').innerText = "Admin Active";
+        document.getElementById('homeAdminBtn').style.background = "var(--accent-color)";
+        document.getElementById('homeAdminBtn').style.borderColor = "var(--accent-color)";
+        document.getElementById('homepageChatInput').placeholder = "Drafting admin dispatch reply wire...";
       } else {
-        alert("Incorrect Admin Security Password!");
+        alert("Verification Credentials Refused.");
       }
     } else {
       isAdminMode = false;
-      document.getElementById('adminBtn').innerText = "Admin Login";
-      document.getElementById('chatInput').placeholder = "Ask something about this product...";
+      document.getElementById('homeAdminBtn').innerText = "Admin";
+      document.getElementById('homeAdminBtn').style.background = "transparent";
+      document.getElementById('homeAdminBtn').style.borderColor = "#cbd5e1";
+      document.getElementById('homepageChatInput').placeholder = "Type your message here...";
+    }
+    loadHomepageChatUI();
+  }
+
+  function loadHomepageChatUI() {
+    const box = document.getElementById('homepageChatBox');
+    let chats = JSON.parse(localStorage.getItem('chats_global_homepage')) || [];
+    if(chats.length === 0) {
+      box.innerHTML = `<p style="text-align:center; color:#94a3b8; font-size:12px; margin-top:20px;">Welcome to Triple A. State your custom order configuration inquiries below.</p>`;
+      return;
+    }
+    box.innerHTML = chats.map(msg => {
+      let side = msg.sender === 'admin' ? 'msg-admin' : 'msg-customer';
+      let label = msg.sender === 'admin' ? '<b>Support:</b> ' : '<b>You:</b> ';
+      return `<div class="chat-message ${side}">${label}${msg.text}</div>`;
+    }).join('');
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function sendHomepageChatMessage() {
+    const input = document.getElementById('homepageChatInput');
+    const text = input.value.trim();
+    if(!text) return;
+    let chats = JSON.parse(localStorage.getItem('chats_global_homepage')) || [];
+    
+    chats.push({ sender: isAdminMode ? 'admin' : 'customer', text: text });
+    
+    localStorage.setItem('chats_global_homepage', JSON.stringify(chats));
+    input.value = '';
+    loadHomepageChatUI();
+  }
+  // --- END OF UPDATED HOMEPAGE CHAT ADMIN FUNCTIONS ---
+
+  function toggleAdminMode() {
+    if (!isAdminMode) {
+      let pass = prompt("Admin Account Security Key Required:");
+      if (pass === "08042010") {
+        isAdminMode = true;
+        document.getElementById('adminBtn').innerText = "Admin Clearance Active";
+        document.getElementById('chatInput').placeholder = "Drafting admin dispatch reply wire...";
+      } else {
+        alert("Verification Credentials Refused.");
+      }
+    } else {
+      isAdminMode = false;
+      document.getElementById('adminBtn').innerText = "Admin Access Link";
+      document.getElementById('chatInput').placeholder = "Ask details about this product...";
     }
     loadChatMessages(currentP.title);
   }
@@ -485,46 +792,37 @@
     const chatBox = document.getElementById('chatBox');
     const selectContainer = document.getElementById('adminUserSelectContainer');
     const userSelect = document.getElementById('chatUserSelect');
-    
     let allChats = JSON.parse(localStorage.getItem('chats_' + productTitle)) || [];
     
     if (isAdminMode) {
       selectContainer.style.display = 'block';
       let uniqueUsers = [...new Set(allChats.map(c => c.userId))];
       let currentSelected = userSelect.value;
-      
       userSelect.innerHTML = uniqueUsers.map(uid => `<option value="${uid}">${uid}</option>`).join('');
-      
       if (uniqueUsers.length === 0) {
-        userSelect.innerHTML = '<option value="">No Active Chats</option>';
-        chatBox.innerHTML = `<p style="text-align:center; color:#999; font-size:13px;">No inquiries from customers yet.</p>`;
+        userSelect.innerHTML = '<option value="">No Inbound Client Pipeline</option>';
+        chatBox.innerHTML = `<p style="text-align:center; color:#999; font-size:12px;">No inquiries from customers yet.</p>`;
         return;
       }
-      
-      if (currentSelected && uniqueUsers.includes(currentSelected)) {
-        userSelect.value = currentSelected;
-      }
-      
+      if (currentSelected && uniqueUsers.includes(currentSelected)) userSelect.value = currentSelected;
       let activeUser = userSelect.value;
-      let filteredChats = allChats.filter(c => c.userId === activeUser);
-      renderChatHTML(filteredChats);
+      renderChatHTML(allChats.filter(c => c.userId === activeUser));
     } else {
       selectContainer.style.display = 'none';
-      let filteredChats = allChats.filter(c => c.userId === myUserId);
-      renderChatHTML(filteredChats);
+      renderChatHTML(allChats.filter(c => c.userId === myUserId));
     }
   }
 
   function renderChatHTML(chats) {
     const chatBox = document.getElementById('chatBox');
     if(chats.length === 0) {
-      chatBox.innerHTML = `<p style="text-align:center; color:#999; font-size:13px;">No conversion history. Send a message to start!</p>`;
+      chatBox.innerHTML = `<p style="text-align:center; color:#999; font-size:12px;">Clear transaction messaging sequence.</p>`;
       return;
     }
     chatBox.innerHTML = chats.map(msg => {
       let className = msg.sender === 'admin' ? 'msg-admin' : 'msg-customer';
-      let senderLabel = msg.sender === 'admin' ? '<b>Shop Owner:</b> ' : '<b>You:</b> ';
-      if (isAdminMode && msg.sender === 'customer') senderLabel = '<b>Customer:</b> ';
+      let senderLabel = msg.sender === 'admin' ? '<b>Shop Manager:</b> ' : '<b>You:</b> ';
+      if (isAdminMode && msg.sender === 'customer') senderLabel = '<b>Client Log:</b> ';
       return `<div class="chat-message ${className}">${senderLabel}${msg.text}</div>`;
     }).join('');
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -534,161 +832,123 @@
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
     if (!text) return;
-
     let allChats = JSON.parse(localStorage.getItem('chats_' + currentP.title)) || [];
     let targetUserId = myUserId;
-
     if (isAdminMode) {
       targetUserId = document.getElementById('chatUserSelect').value;
-      if (!targetUserId) {
-        alert("Please pick a customer thread from dropdown to message.");
-        return;
-      }
+      if (!targetUserId) return;
     }
-
-    allChats.push({
-      sender: isAdminMode ? 'admin' : 'customer',
-      userId: targetUserId,
-      text: text
-    });
-
+    allChats.push({ sender: isAdminMode ? 'admin' : 'customer', userId: targetUserId, text: text });
     localStorage.setItem('chats_' + currentP.title, JSON.stringify(allChats));
     input.value = '';
     loadChatMessages(currentP.title);
   }
 
-  /* Dynamic Review System with Base64 Image Support */
   function loadReviews(p) {
     let localReviews = JSON.parse(localStorage.getItem('reviews_' + p.title)) || [];
-    
-    let initialCount = p.reviews.count;
-    let initialRating = p.reviews.rating;
-    
-    let totalCount = initialCount + localReviews.length;
-    let totalSum = (initialRating * initialCount);
-    localReviews.forEach(r => totalSum += parseFloat(r.rating));
-    
-    let avgRating = totalCount > 0 ? (totalSum / totalCount).toFixed(1) : "0.0";
+    let tCount = p.reviews.count + localReviews.length;
+    let tSum = (p.reviews.rating * p.reviews.count);
+    localReviews.forEach(r => tSum += parseFloat(r.rating));
+    let avgRating = tCount > 0 ? (tSum / tCount).toFixed(1) : "0.0";
     
     document.getElementById('averageRatingDisplay').innerText = avgRating;
-    document.getElementById('totalReviewsCountDisplay').innerText = `Based on ${totalCount} reviews`;
-    
-    let starsHtml = '&#9733;'.repeat(Math.floor(avgRating)) + '&#9734;'.repeat(5 - Math.floor(avgRating));
+    document.getElementById('totalReviewsCountDisplay').innerText = `Based on ${tCount} platform ratings`;
+    let starsHtml = '★'.repeat(Math.floor(avgRating)) + '☆'.repeat(5 - Math.floor(avgRating));
     document.getElementById('averageStarsDisplay').innerHTML = starsHtml;
-    
-    document.getElementById('modalReviews').innerHTML = `${starsHtml} <b>${avgRating} out of 5</b> (${totalCount} Verified Reviews)`;
+    document.getElementById('modalReviews').innerHTML = `${starsHtml} <b>${avgRating}/5.0</b> (${tCount} Verified Purchase Reviews)`;
 
     const list = document.getElementById('reviewsList');
-    let html = '';
-    
     if (localReviews.length === 0) {
-      html = `<p style="text-align:center; color:#999; font-size:13px; padding:10px 0;">No written comments left yet. Be the first to rate!</p>`;
-    } else {
-      html = localReviews.map(r => {
-        // If an image string exists, render it. Clicking it opens the lightbox full screen.
-        let uploadedImgHtml = r.image ? `<br><img src="${r.image}" class="review-img-preview" onclick="openLightbox('${r.image}')" title="Click to enlarge">` : '';
-        return `
-        <div style="background:#fdfdfd; border:1px solid #eee; padding:12px; border-radius:6px; margin-bottom:10px;">
-          <div style="display:flex; justify-content:between; font-size:13px; color:#555; margin-bottom:4px; align-items:center;">
-            <strong style="flex:1; color:#222;">👤 ${r.name}</strong>
-            <span style="color:#f39c12; letter-spacing:1px;">${'&#9733;'.repeat(r.rating)}${ '&#9734;'.repeat(5 - r.rating) }</span>
-          </div>
-          <p style="margin:0; font-size:14px; color:#444; line-height:1.4;">${r.comment}</p>
-          ${uploadedImgHtml}
-        </div>
-      `}).join('');
+      list.innerHTML = `<p style="text-align:center; color:#94a3b8; font-size:13px; padding:15px 0;">No written client validation indexes recorded yet.</p>`;
+      return;
     }
-    
-    html += `
-      <div style="text-align:center; padding:12px; color:#aaa; font-size:11px; border-top:1px dashed #eee; margin-top:10px;">
-        🔒 Verified (${initialCount}) platform baseline customer standard indices are safely compiled.
-      </div>`;
-      
-    list.innerHTML = html;
+    list.innerHTML = localReviews.map(r => {
+      let mediaHtml = '';
+      if (r.media) {
+          if (r.isVideo) {
+              mediaHtml = `<br><video src="${r.media}" controls class="review-video-preview"></video>`;
+          } else {
+              mediaHtml = `<br><img src="${r.media}" class="review-img-preview" onclick="openLightbox('${r.media}')">`;
+          }
+      }
+
+      return `
+      <div style="background:#f8fafc; border:1px solid var(--border-color); padding:14px; border-radius:6px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+          <strong style="color:#1e293b;">👤 ${r.name}</strong>
+          <span style="color:#f59e0b;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+        </div>
+        <p style="margin:0; font-size:13.5px; color:#475569; line-height:1.5;">${r.comment}</p>
+        ${mediaHtml}
+      </div>
+    `}).join('');
   }
 
   function submitReview() {
-    const nameInput = document.getElementById('reviewName');
-    const ratingSelect = document.getElementById('reviewRating');
     const commentInput = document.getElementById('reviewComment');
-    const imageInput = document.getElementById('reviewImage');
+    if (!commentInput.value.trim()) return alert("Feedback dialogue context missing.");
     
-    const name = nameInput.value.trim() || "Verified Buyer";
-    const rating = parseInt(ratingSelect.value);
-    const comment = commentInput.value.trim();
+    const mediaFile = document.getElementById('reviewMedia').files[0];
     
-    if (!comment) {
-      alert("Please write a comment text body to publish your review feedback.");
-      return;
-    }
-    
-    const file = imageInput.files[0];
-    
-    if (file) {
+    if (mediaFile) {
+      if(mediaFile.size > 2 * 1024 * 1024) {
+          alert("Selected file is too large! Please upload images or videos under 2MB to prevent browser storage overload.");
+          return;
+      }
+
       const reader = new FileReader();
-      reader.onload = function(e) {
-        // Callback once image file converts to Base64 data URI successfully
-        saveReviewData(name, rating, comment, e.target.result);
+      reader.onload = function(e) { 
+          const isVideo = mediaFile.type.startsWith('video/');
+          saveReviewData(e.target.result, isVideo); 
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(mediaFile);
     } else {
-      saveReviewData(name, rating, comment, null);
+      saveReviewData(null, false);
     }
   }
 
-  function saveReviewData(name, rating, comment, base64Image) {
+  function saveReviewData(base64Media, isVideoFlag) {
     let localReviews = JSON.parse(localStorage.getItem('reviews_' + currentP.title)) || [];
-    
     localReviews.unshift({
-      name: name,
-      rating: rating,
-      comment: comment,
-      image: base64Image
+      name: document.getElementById('reviewName').value.trim() || "Verified Buyer",
+      rating: parseInt(document.getElementById('reviewRating').value),
+      comment: document.getElementById('reviewComment').value.trim(),
+      media: base64Media,
+      isVideo: isVideoFlag
     });
     
-    localStorage.setItem('reviews_' + currentP.title, JSON.stringify(localReviews));
-    
-    // Reset Form Input Layout Fields
-    document.getElementById('reviewName').value = '';
-    document.getElementById('reviewComment').value = '';
-    document.getElementById('reviewRating').value = '5';
-    document.getElementById('reviewImage').value = '';
-    
-    loadReviews(currentP);
-    renderGrid(products);
-    alert("Thank you! Your product review with image has been submitted successfully.");
-  }
-
-  /* Related Products Grid System Logic */
-  function renderRelatedProducts(currentProduct) {
-    const relatedGrid = document.getElementById('relatedProductGrid');
-    let related = products.filter(p => p.type === currentProduct.type && p.title !== currentProduct.title);
-    
-    if(related.length === 0) {
-      related = products.filter(p => p.title !== currentProduct.title);
+    try {
+        localStorage.setItem('reviews_' + currentP.title, JSON.stringify(localReviews));
+    } catch(e) {
+        alert("Storage Quota Exceeded! Video might be too large for local cache memory.");
+        return;
     }
 
-    relatedGrid.innerHTML = related.slice(0, 4).map(p => {
-      let localReviews = JSON.parse(localStorage.getItem('reviews_' + p.title)) || [];
-      let tCount = p.reviews.count + localReviews.length;
-      let tSum = (p.reviews.rating * p.reviews.count);
-      localReviews.forEach(r => tSum += parseFloat(r.rating));
-      let currentAvg = tCount > 0 ? (tSum / tCount).toFixed(1) : "0.0";
+    document.getElementById('reviewName').value = '';
+    document.getElementById('reviewComment').value = '';
+    document.getElementById('reviewMedia').value = '';
+    loadReviews(currentP);
+  }
 
-      let starsHtml = '&#9733;'.repeat(Math.floor(currentAvg)) + '&#9734;'.repeat(5 - Math.floor(currentAvg));
-      return `
+  function renderRelatedProducts(currentProduct) {
+    const grid = document.getElementById('relatedProductGrid');
+    let related = products.filter(p => p.type === currentProduct.type && p.title !== currentProduct.title);
+    if(related.length === 0) related = products.filter(p => p.title !== currentProduct.title);
+    grid.innerHTML = related.slice(0, 4).map(p => {
+        let priceHtml = `<p class="price-current">৳${p.price}</p>`;
+        priceHtml += generateDiscountHTML(p.price, p.originalPrice);
+        
+        return `
       <div class="product-card" onclick='openModal(${JSON.stringify(p).replace(/"/g, "&quot;")})'>
         <img src="${p.images[0]}" alt="${p.title}">
         <div class="product-info">
           <h3>${p.title}</h3>
-          <div class="stars">${starsHtml} (${tCount})</div>
-          <p class="price">${p.price} BDT</p>
+          ${priceHtml}
         </div>
       </div>
     `}).join('');
   }
 
-  /* Lightbox Logic */
   function openLightbox(src) {
     if(!src) return;
     document.getElementById('lightboxImg').src = src;
@@ -699,50 +959,42 @@
     document.getElementById('imageLightboxModal').style.display = 'none';
   }
 
-  /* Cart Logic */
   function addToCart() {
     const size = document.getElementById('sizeSelect').value;
     const price = updateViewPrice();
-    cart.push({ title: currentP.title, size: size, price: price });
-    updateCartCount();
-    alert("Item added to cart!");
-    closeModal('productModal');
-  }
-
-  function updateCartCount() {
+    cart.push({ title: currentP.title, size: size, price: price, colors: currentP.colors });
     document.getElementById('cartCount').innerText = cart.length;
+    alert("Asset bundle item appended to cart session layout.");
+    closeModal('productModal');
   }
 
   function openCart() {
     document.getElementById('cartModal').style.display = 'block';
     document.getElementById('cartSection').style.display = 'block';
     document.body.style.overflow = 'hidden';
-    
     const list = document.getElementById('cartItemsList');
     if (cart.length === 0) {
-      list.innerHTML = "<p style='text-align:center;'>Your cart is empty.</p>";
-      document.getElementById('cartTotalDisplay').innerText = "Total: 0 BDT";
+      list.innerHTML = "<p style='text-align:center; color:#64748b; padding:20px 0;'>Active card array structural buffer clear empty.</p>";
+      document.getElementById('cartTotalDisplay').innerText = "Total: ৳0";
       return;
     }
-
     let total = 0;
     list.innerHTML = cart.map((item, index) => {
       total += item.price;
       return `<div class="cart-item">
-                <p><b>${item.title}</b> (Size: ${item.size}) <br> <small>${item.price} BDT</small></p>
-                <span class="remove-btn" onclick="removeFromCart(${index})">X Remove</span>
+                <p><b>${item.title}</b><br><small style="color:#64748b;">Size: ${item.size} | ৳${item.price}</small></p>
+                <span class="remove-btn" onclick="removeFromCart(${index})">✕ Remove</span>
               </div>`;
     }).join('');
-    document.getElementById('cartTotalDisplay').innerText = `Subtotal: ${total} BDT`;
+    document.getElementById('cartTotalDisplay').innerText = `Subtotal Totaling: ৳${total}`;
   }
 
   function removeFromCart(index) {
     cart.splice(index, 1);
-    updateCartCount();
+    document.getElementById('cartCount').innerText = cart.length;
     openCart();
   }
 
-  /* Checkout Form Logic */
   let isCartCheckout = false;
   let baseCheckoutTotal = 0;
 
@@ -750,16 +1002,36 @@
     isCartCheckout = fromCart;
     baseCheckoutTotal = 0;
     let itemsString = "";
+    const colorSelect = document.getElementById('formColorSelect');
+    const shoulderGroup = document.getElementById('formShoulderGroup');
 
     if (fromCart) {
-      if(cart.length === 0) return alert("Cart is empty!");
+      if(cart.length === 0) return;
       cart.forEach(item => { baseCheckoutTotal += item.price; itemsString += `${item.title} (${item.size}), `; });
       document.getElementById('cartModal').style.display = 'none';
       document.getElementById('productModal').style.display = 'block';
+      
+      colorSelect.innerHTML = '<option value="As Arranged per Item Script">Default/Mixed Colors as selected per item</option>';
+      shoulderGroup.style.display = 'block';
     } else {
       baseCheckoutTotal = updateViewPrice();
       itemsString = `${currentP.title} (${document.getElementById('sizeSelect').value})`;
+      
+      if (currentP.colors && currentP.colors.length > 0) {
+        colorSelect.innerHTML = currentP.colors.map(col => `<option value="${col}">${col}</option>`).join('');
+      } else {
+        colorSelect.innerHTML = '<option value="Standard Default Look">Standard Baseline Base Color</option>';
+      }
+
+      if (currentP.type === 'Wall Mate') {
+        shoulderGroup.style.display = 'none';
+      } else {
+        shoulderGroup.style.display = 'block';
+      }
     }
+
+    // Reset default select when showing the form
+    document.getElementById('formShoulderSelect').value = "Regular Fit";
 
     document.getElementById('mainModalContentWrapper').style.display = 'none'; 
     document.getElementById('orderFormSection').style.display = 'block';
@@ -774,26 +1046,28 @@
   function togglePaymentBox() {
     const method = document.getElementById('paymentMethod').value;
     const location = document.getElementById('deliveryLocation').value;
-    const bkashNagadSection = document.getElementById('bkashNagadSection');
+    const shoulderStyle = document.getElementById('formShoulderSelect').value;
+    const shoulderGroup = document.getElementById('formShoulderGroup');
     
     let finalTotal = baseCheckoutTotal;
 
-    if (location === 'Narayanganj') {
-      finalTotal += 60;
-    } else if (location === 'Dhaka') {
-      finalTotal += 115;
-    } else if (location === 'Other Districts') {
-      finalTotal += 135;
+    // Check if Drop Shoulder is selected and visible (Not hidden by Wall Mate filter)
+    if (shoulderGroup.style.display !== 'none' && shoulderStyle === 'Drop Shoulder') {
+      finalTotal += 70;
     }
 
+    if (location === 'Narayanganj') finalTotal += 60;
+    else if (location === 'Dhaka') finalTotal += 115;
+    else if (location === 'Other Districts') finalTotal += 135;
+
     if (method === 'Pre-payment') {
-      bkashNagadSection.style.display = 'block';
+      document.getElementById('bkashNagadSection').style.display = 'block';
     } else {
-      bkashNagadSection.style.display = 'none';
+      document.getElementById('bkashNagadSection').style.display = 'none';
       finalTotal += 20; 
     }
 
-    document.getElementById('checkoutTotalDisplay').innerText = `Total: ${finalTotal} BDT`;
+    document.getElementById('checkoutTotalDisplay').innerText = `Grand Net Total: ৳${finalTotal}`;
     document.getElementById('finalPriceInput').value = finalTotal + " BDT";
   }
 
@@ -803,7 +1077,6 @@
     renderGrid(products); 
   }
 
-  // Initialize Landing View Grid
   renderGrid(products);
 </script>
 </body>
